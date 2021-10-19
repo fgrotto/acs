@@ -1,4 +1,3 @@
-
 % help show
 % help rigidBodyJoint
 % help rigidBodyTree
@@ -26,17 +25,35 @@ showdetails(robot)
 
 figure;
 config = homeConfiguration(robot);
-show(robot,config);
+show(robot, config);
 
-% config(1).JointPosition = 0.1;
-% config(2).JointPosition = pi/3;
-% config(3).JointPosition = 0.1;
-% 
-% 
-% show(robot,config);
+config(1).JointPosition = 0;
+config(2).JointPosition = 0;
+config(3).JointPosition = 0;
+
+
+show(robot,config);
 % xlim([-0.5 0.8])
 % ylim([-0.5 0.5])
 % zlim([0 0.8])
 
+%% Calculate direct kinematics
 
+dk = getTransform(robot, config, 'base_link', 'ee')
 
+%% Inverse kinementics
+
+ik = inverseKinematics('RigidBodyTree', robot);
+
+weights = [1 1 1 1 1 1];
+
+% [configSol,solInfo] = ik(endeffector,pose,weights,initialguess)
+% Weight for pose tolerances, specified as a six-element vector. The first three elements
+% correspond to the weights on the error in orientation for the desired pose. The last 
+% three elements correspond to the weights on the error in xyz position for the desired 
+% pose.
+[configSol, solInfo] = ik('ee', dk, weights, robot.homeConfiguration);
+
+%% Calculate geometric jacobian
+
+geometricJacobian = geometricJacobian(robot, config, 'ee')
