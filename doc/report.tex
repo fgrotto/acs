@@ -8,9 +8,21 @@
 \usepackage{url}
 \usepackage{bm}
 \usepackage{float}
-\usepackage{times}
+\usepackage{kpfonts}
+\usepackage{mathpazo}
 \usepackage{enumitem}
 \setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt}
+
+\renewcommand*{\a}{\alpha}
+\renewcommand*{\t}{\theta}
+\renewcommand*{\l}{\ell}
+\newcommand*{\T}{^\top}
+\newcommand*{\I}{\mathbb{I}}
+\newcommand*{\q}{\bm{q}}
+\newcommand*{\dotq}{\dot{\q}}
+\newcommand*{\de}{\mathop{}\!\mathrm{d}}
+\DeclareMathOperator{\sgn}{sgn}
+
 \begin{document}
 \author{Filippo Grotto VR460638}
 
@@ -19,50 +31,235 @@
 \maketitle
 \tableofcontents
 
-% \section{Introduction}
-% The aim of Forecast project \cite{Forecast} is to provide a testbed to benchmark control algorithms and get in this way comparable results especially in the context of force control algorithms. The procedure uses several performances indicators to assess the controller in use such as static error, dynamic error, overshoot and bandwidth. The latter is estimated using a sinusoidal function that increments frequency over time (e.g. 1 to 10Hz in 10 seconds) until we reach -3db over the desired reference. However this estimation suffers from the presence of saturation of the motor used to drive the experiments making the result about the controller not as general as we want. In the following section we will propose a method to reduce the amplitude of the reference signal before reaching the motor saturation in order to get a much more precise bandwidth estimation using general transfer function methods.
+\section{Kinematics}
 
-% \newpage
-% \section{Noise Sensitivity Function}
-% If we consider the general feedback system in Fig.\ref{fig:feedback}. There are lots of transfer function that we are possibile to define depending on our input-outputs pairs. In our cases we will consider $F(s)=1$. 
+\subsection{Direct Kinematics}
 
-% \begin{figure}[H]
-% \begin{center}
-% \includegraphics[width=0.8\textwidth]{images/feedback.png}
-% \end{center}
-% \caption{A general feedback system taken from \cite{scientist}}
-% \label{fig:feedback}
-% \end{figure}
+\begin{center}
+\includegraphics[scale=0.40,trim={10, 10, 10, 10},clip]{images/robot.png}
+\end{center}
 
-% \noindent We are actually interested in having the relation between the input of the system $r$ and the control input $u$ in order to have an idea of how the saturation is reached since we assume our $P(s)$ known (we can identify all the parameters of our DC motors).
-% \begin{equation}
-%   CS(jw) = \frac{C(jw)}{1+C(jw)P(jw)}
-% \end{equation}
+\noindent Lets define the DH table for our manipulator:
 
-% \section{Noise Sensitivity Responses}
+\begin{center}
+\begin{tabular}{|c|c|c|c|c|}
+    \hline
+    $\Sigma_i$ & $d_i$ & $\theta_i$ & $a_i$ & $\alpha_i$ \\ 
+    \hline
+    $b-0$ & $\l_0$ &    $0$ &    $0$    & $\frac{\pi}{2}$ \\
+    $0-1$ &    $0$    & $\t_1$ & $\l_1$ &        $0$ \\
+    $1-2$ &    $\l_2+d_2$    & $\frac{\pi}{2}$ & $0$ &        $\frac{\pi}{2}$ \\
+    $2-3$ &    $\l_3+d_3$ &    $\frac{\pi}{2}$ &    $0$    &        $0$ \\
+    $3-e$ &    $0$    &    $0$ &    $0$    &        $0$ \\
+    \hline
+\end{tabular}
+\end{center}
 
-% In our case let's consider a basic position control architecture for a simplified motor model (only the mechanical part is considered) as depicted in Fig \ref{fig:control}
+\noindent The homogenous transformation is defined according to the following matrix and calculated for each row of the DH table. By multiplying $H^b_0H^0_1H^1_2H^2_3H^3_e$ we obtain the final transformation
+\[
+H^{i - 1}_{i}(q_i) = \begin{bmatrix}
+    c_{\t_i} &  - s_{\t_i}c_{\a_i} & s_{\t_i}s_{\a_i} & a_i c_{\t_i} \\
+    s_{\t_i} & c_{\t_i}c_{\a_i} &  - c_{\t_i}s_{\a_i} & a_i s_{\t_i} \\
+        0    &     s_{\a_i}     &     c_{\a_i}     &     d_i     \\
+        0    &         0        &         0        &     1        \\
+\end{bmatrix}
+\]
+\[
+H^b_0 = \begin{bmatrix}
+    1 & 0 & 0 &    0    \\
+    0 & 0 &  - 1 &    0    \\
+    0 & 1 & 0 & \l_0 \\
+    0 & 0 & 0 &    1    \\
+\end{bmatrix}
+\qquad
+\qquad
+H^0_1(\t_1) = \begin{bmatrix}
+    c_1 &  - s_1 & 0 & \l_1 c_1 \\
+    s_1 & c_1 & 0 & \l_1 s_1 \\
+        0    &     0    & 1 &        0        \\
+        0    &     0    & 0 &        1        \\
+\end{bmatrix}
+\qquad
+H^1_2(d_2) = \begin{bmatrix}
+    0 &  0 & 1 & 0 \\
+    1 & 0 & 0 & 0 \\
+        0    &    1    & 0 &        d_2+\l_2       \\
+        0    &     0    & 0 &        1        \\
+\end{bmatrix}
+\]
+\[
+H^2_3(d_3) = \begin{bmatrix}
+    0 & -1 & 0 & 0 \\
+    1 & 0 & 0 & 0 \\
+    0 & 0 & 1 & d_3 + l_3 \\
+    0 & 0 & 0 & 1 \\
+\end{bmatrix}
+\qquad
+H^3_e = \begin{bmatrix}
+    1 & 0 & 0 & 0 \\
+    0 & 1 & 0 & 0 \\
+    0 & 0 & 1 & 0 \\
+    0 & 0 & 0 & 1 \\
+\end{bmatrix}
+\]
 
-% \begin{figure}[H]
-% \begin{center}
-% \includegraphics[width=1\textwidth]{images/position.png}
-% \end{center}
-% \caption{Simulink model of a basic position control architecture}
-% \label{fig:control}
-% \end{figure}
+\[
+H^b_e(\q) = \begin{bmatrix}
+    0    &  - s_1 & c_1 & c_1(\l_1+\l_3+d_3)\\
+    -1   & 0      &  0  &  -\l_2 - d_2 \\
+    0    & -c_{1} & s_1 & s_1(\l_1+\l_3+d_3) + \l_0 \\
+    0    &     0  & 0   &        1       \\
+\end{bmatrix}
+\]
 
-% \noindent Our aim is to replace the input with a correctly scaled sinusoidal function that guarantees that motor saturation is not exceeded during the experiment. The PD controller can be tuned as you prefer and the motor inertia $Jm$ and motor damping $dm$ are assumed to be known.
-  
+\subsection{Inverse Kinematics}
+Let's consider the position of ee with respect of the base frame to calculate the value of the joints.
+\[
+p^b_e = \begin{bmatrix}
+    x \\ y \\ z \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+    c_1(\l_1+\l_3+d_3)\\
+     -\l_2 - d_2 \\
+    s_1(\l_1+\l_3+d_3) + \l_0 \\
+    1        \\
+\end{bmatrix}
+\]
 
-% \begin{thebibliography}{9}
+It is easy to see that
+\[
+d_2 = - \l_2 - y \\
+\]
 
-% \bibitem{Forecast}
-% Forecast Project https://eurobench2020.eu/developing-the-framework/force-control-algorithms-testbench-forecast/
+\[
+\t_1 = \mathop{Atan2}(z-\l_0, x)
+\]
 
-% \bibitem{scientist}
-% Karl Johan Astrom, Richard M. Murray Feedback Systems An Introduction for Scientists and Engineers
-% \end{thebibliography}
 
+For $d_3$ we can apply sum of squares and the result is:
+\[
+  d_3 = -\l_1 \pm \sqrt{x^2+(z-\l_0)^2} - \l_3  
+\]
+
+\section{Jacobians}
+\subsection{Geometric Jacobians}
+The geometric jacobian is defined as follow with $\q = [\t_1,   d_2,   d_3]^\top$. Note that the matlab robotic toolbox defines the angular velocities above the linear velocities:
+\[
+\begin{bmatrix}
+    \dot{p}_e \\
+    \omega_e \\
+\end{bmatrix}
+ =
+\begin{bmatrix}
+    \dot{x} \\
+    \dot{y} \\
+    \dot{z} \\
+    \omega_x \\
+    \omega_y \\
+    \omega_z \\
+\end{bmatrix}
+ =
+\left[
+\begin{array}{c|c|c}
+    J_{P_1} & J_{P_2} & J_{P_3} \\
+    J_{O_1} & J_{O_2} & J_{O_3} \\
+\end{array}
+\right]
+\,
+\begin{bmatrix}
+    \dot{\t}_1 \\
+    \dot{d}_2 \\
+    \dot{d}_3 \\
+\end{bmatrix}
+\]
+\begin{align*}
+J_{P_1} &= z_0 \times (d^0_e  -  d^0_0) = \begin{bmatrix}
+    -s_1(\l_1 + \l_3 + d_3) \\
+    0 \\
+    c_1(\l_1 + \l_3 + d_3) \\
+\end{bmatrix} 
+&
+J_{O_1} &= z_0 = \begin{bmatrix}0\\0\\1\end{bmatrix}
+\\
+J_{P_2} &= z_1 = \begin{bmatrix}
+     0 \\
+     -1 \\
+     0 \\
+\end{bmatrix} 
+&
+J_{O_2} &= \begin{bmatrix}0\\0\\0\end{bmatrix}
+\\
+J_{P_3} &= z_2 = \begin{bmatrix}
+    c_1\\
+    0\\
+    s_1
+\end{bmatrix}
+&
+J_{O_3} &= \begin{bmatrix}0\\0\\0\end{bmatrix}
+\end{align*}
+We can finally put all the pieces together and obtain the final geometric jacobian:
+\[
+J(\q) = 
+\begin{bmatrix}
+    -s_1(\l_1 + \l_3 + d_3) &  0 & c1 \\
+     0 &  -1 & 0 \\
+     c_1(\l_1 + \l_3 + d_3) & 0 & s1 \\
+    0 & 0 & 0 \\
+    0 & 0 & 0 \\
+    1 & 0 & 0 \\
+\end{bmatrix}
+\]
+
+\subsection{Analytical Jacobian}
+The analytical jacobian can be easily calculated by using partial derivatives of $p^b_e$
+\[
+p^b_e = \begin{bmatrix}
+    x \\ y \\ z \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+    c_1(\l_1+\l_3+d_3)\\
+     -\l_2 - d_2 \\
+    s_1(\l_1+\l_3+d_3) + \l_0 \\
+    1        \\
+\end{bmatrix}
+\]
+
+\noindent Finally we end up with the analytical jacobian
+\[
+Ja(\q) = 
+\begin{bmatrix}
+    -s_1(\l_1 + \l_3 + d_3) &  0 & c1 \\
+     0 &  -1 & 0 \\
+     c_1(\l_1 + \l_3 + d_3) & 0 & s1 \\
+    1 & 0 & 0 \\
+    0 & 0 & 0 \\
+    0 & 0 & 0 \\
+\end{bmatrix}
+\]
+
+\noindent Another possibility is to use the relation between the geometric and analytical jacobian as follow using ZYZ:
+
+\[
+\omega_e = T(\phi_e)\dot{\phi}_e
+\qquad
+T(\phi_e) = \begin{bmatrix}
+    0 & -s_\varphi & c_\varphi s_\theta \\
+    0 &  c_\varphi & s_\varphi s_\theta \\
+    1 &          0 &           c_\theta \\
+\end{bmatrix}
+\]
+
+\[
+J(\q) = T_A(\phi_e) J_A(\q)
+\]
+\[
+T_A(\phi_e) = \begin{bmatrix}
+    \I_3 & \emptyset_3 \\ 
+\emptyset_3 &     T(\phi_e) \\
+\end{bmatrix}
+\]
 \end{document}
 
 

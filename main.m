@@ -27,7 +27,7 @@ showdetails(robot)
 
 figure;
 config = homeConfiguration(robot);
-config(1).JointPosition = 0.1;
+config(1).JointPosition = 0;
 config(2).JointPosition = 0;
 config(3).JointPosition = 0;
 
