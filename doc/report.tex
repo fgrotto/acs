@@ -260,6 +260,116 @@ T_A(\phi_e) = \begin{bmatrix}
 \emptyset_3 &     T(\phi_e) \\
 \end{bmatrix}
 \]
+
+\section{Energy}
+Let's calculate $p_{\l_i}$ of the center of mass wrt of $\Sigma_0$. To get them let's calculate $p^i_{\l_i}$ of the center of mass wrt of $\Sigma_i$
+\[
+p_{\l_1}^{1} = \begin{bmatrix}  - \frac{\l_1}{2} \\ 0 \\ 0 \end{bmatrix}
+\qquad
+\qquad
+p_{\l_2}^{2} = \begin{bmatrix} 0 \\ 0 \\  - \frac{\l_2}{2} \end{bmatrix}
+\qquad
+\qquad
+p_{\l_3}^{3} = \begin{bmatrix} 0 \\ 0 \\  - \frac{\l_3}{2} \end{bmatrix}
+\]
+we can express the homogenous wrt of $\Sigma_0$ using the following formula: 
+\[
+p_{\l_i} = R^0_i p_{\l_i}^{i}  +  d^0_i
+\] 
+
+\subsection{Potential Energy}
+The potential energy is calculated according to the formula:
+\[
+    U_i = -m_{l_i}g_0^{T}p_{l_i}
+    \qquad
+    g_0 = \begin{bmatrix}
+        0\\ 0 \\ -g
+    \end{bmatrix}
+\]
+\noindent The total potential energy is the sum of the 3 contributions $U_1$ $U_2$ and $U_3$. The total expression is reported and was calculated using the MATLAB symbolic toolbox ($L_{ih}$ is the length of i-th link and $m_i$ is the mass)
+\[
+    U = \frac{-gsin(\theta_1)(L_{1h}m_1 + 2L_{1h}m_2 + 2L_{1h}m_3 + L_{3h}m_3 + 2d_3m_3)}{2}  
+\]
+
+\subsection{Kinetic Energy}
+The kinetic energy is calculated using the following formula:
+\[
+\mathcal{T}(\q,\dotq) = \frac{1}{2}\dotq\T B(\q) \dotq
+\]
+
+\[
+B(\q) = \sum_{i=1}^{n} B_i(\q)
+      = \sum_{i=1}^{n} m_{\l_i} \bigl({J^{\l_i}_{P}}\T J^{\l_i}_{P}\bigr)
+       +  \bigl({R_i^0}\T J^{\l_i}_{O}\bigr)\T I_{\l_i}^{i} \bigl({R_i^0}\T J^{\l_i}_{O}\bigr)
+\]
+
+\noindent It is necessary to calculate the inertia tensors $I_{\l_i}^{i}$ and the partial jacobians $J^{\l_i}_{P}$ and $J^{\l_i}_{O}$. We will use the steiner theorem because all frames $\Sigma_i$ are translated of $p_{\l_i}^{i}$ w.r.t. of the center of mass (i.e inertia tensor w.r.t. of the axis of the joint that the
+link is attached).
+\[
+    I_{\l_1}^{1} = I_{\l_1}^{C_1} + m_{\l_1}S^{T}(r)S(r) = I_{\l_1}^{C_1}  +  m_{\l_1}\bigl(r\T r \I_{3,3}  -  r r\T\bigr) 
+\]
+For the inertia tensors we can use the following formulas for the cylindrical and prismatic links considering that the prismatic links have a square base.
+\[
+    I^C_{cylinder} = \frac{1}{2}\begin{bmatrix}
+        m(a^2+b^2) & 0 &0 \\
+        0 &m(3(a^2+b^2)^2+h^2)& 0 \\
+        0& 0& m(3(a^2+b^2)^2+h^2)
+    \end{bmatrix}
+\]
+
+\[
+    I^C_{prismatic} = \frac{1}{12}\begin{bmatrix}
+        m(b^2+c^2) & 0 &0 \\
+        0 &m(a^2+c^2)^2& 0 \\
+        0& 0& m(a^2+b^2)
+    \end{bmatrix}
+\]
+
+\bigskip
+\noindent Finally we need to compute the partial jacobians in order to calculate velocity of intermediate links.
+
+\[
+    J^{\l_i}_{P_j} = \begin{cases}
+       z_{j-1} & \text{prismatic joint} \\
+       z_{j-1} \times (p_{l_i}- p_{j-1}) & \text{revolute joint} 
+      \end{cases}
+    \qquad
+    J^{\l_i}_{O_j} = \begin{cases}
+    0 & \text{prismatic joint} \\
+    z_{j-1} & \text{revolute joint} 
+    \end{cases}
+\]
+
+\noindent In our case the computer partial jacobians are:
+
+\[
+    J^{\l_1}_{P} = \begin{bmatrix}
+        -\l_1sin(\theta_1)/2 & 0 & 0 \\
+ \l_1cos(\theta_1)/2 &0 &0 \\
+               0 &0 &0
+    \end{bmatrix}
+    \qquad
+    J^{\l_2}_{P} = \begin{bmatrix}
+        \l_2cos(\theta_1)/2 - \l_1sin(\theta_1) &0 &0\\
+\l_1cos(\theta_1) + (\l_2sin(\theta_1))/2& 0 &0\\
+                            0& 1& 0;
+    \end{bmatrix}
+\]
+\[
+    J^{\l_3}_{P} = \begin{bmatrix}
+        -sin(\theta_1)(\l_1 + \l_3h/2 + d_3) &0 & cos(\theta_1)\\
+ cos(\theta_1)(\l_1 + \l_3h/2 + d_3) &0 &sin(\theta_1)\\
+                          0 &1 &      0
+    \end{bmatrix}
+    \qquad
+    J^{\l_1}_{O_j} = J^{\l_2}_{O_j} = J^{\l_3}_{O_j} =\begin{bmatrix}
+        0 &0 &0\\ 0& 0 &0\\ 1& 0& 0
+    \end{bmatrix}
+\]
+
+\[
+  B(\textbf{q}) = B_1(\textbf{q}) + B_2(\textbf{q}) +B_3(\textbf{q}) 
+\]
+
+\noindent Finally we can recover the kinetic energy using the calculated $B(\textbf{q})$ and $ \dot{\textbf{q}}$.
 \end{document}
-
-
