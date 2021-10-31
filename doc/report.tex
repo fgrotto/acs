@@ -142,7 +142,7 @@ For $d_3$ we can apply sum of squares and the result is:
   d_3 = -\l_1 \pm \sqrt{x^2+(z-\l_0)^2} - \l_3  
 \]
 
-\section{Jacobians}
+\section{Differential Kinematics}
 \subsection{Geometric Jacobians}
 The geometric jacobian is defined as follow with $\q = [\t_1,   d_2,   d_3]^\top$. Note that the matlab robotic toolbox defines the angular velocities above the linear velocities:
 \[
@@ -233,8 +233,8 @@ Ja(\q) =
     -s_1(\l_1 + \l_3 + d_3) &  0 & c1 \\
      0 &  -1 & 0 \\
      c_1(\l_1 + \l_3 + d_3) & 0 & s1 \\
-    1 & 0 & 0 \\
     0 & 0 & 0 \\
+    -1 & 0 & 0 \\
     0 & 0 & 0 \\
 \end{bmatrix}
 \]
@@ -261,13 +261,13 @@ T_A(\phi_e) = \begin{bmatrix}
 \end{bmatrix}
 \]
 
-\section{Energy}
+\section{Lagrangian formulation}
 Let's calculate $p_{\l_i}$ of the center of mass wrt of $\Sigma_0$. To get them let's calculate $p^i_{\l_i}$ of the center of mass wrt of $\Sigma_i$
 \[
 p_{\l_1}^{1} = \begin{bmatrix}  - \frac{\l_1}{2} \\ 0 \\ 0 \end{bmatrix}
 \qquad
 \qquad
-p_{\l_2}^{2} = \begin{bmatrix} 0 \\ 0 \\  - \frac{\l_2}{2} \end{bmatrix}
+p_{\l_2}^{2} = \begin{bmatrix} 0 \\ - \frac{\l_2}{2} \\ 0 \end{bmatrix}
 \qquad
 \qquad
 p_{\l_3}^{3} = \begin{bmatrix} 0 \\ 0 \\  - \frac{\l_3}{2} \end{bmatrix}
@@ -288,7 +288,7 @@ The potential energy is calculated according to the formula:
 \]
 \noindent The total potential energy is the sum of the 3 contributions $U_1$ $U_2$ and $U_3$. The total expression is reported and was calculated using the MATLAB symbolic toolbox ($L_{ih}$ is the length of i-th link and $m_i$ is the mass)
 \[
-    U = \frac{-gsin(\theta_1)(L_{1h}m_1 + 2L_{1h}m_2 + 2L_{1h}m_3 + L_{3h}m_3 + 2d_3m_3)}{2}  
+    U = \frac{-gsin(\theta_1)(l_{1}m_1 + 2l_{1}m_2 + 2l_{1}m_3 + l_{3}m_3 + 2d_3m_3)}{2}  
 \]
 
 \subsection{Kinetic Energy}
@@ -312,15 +312,15 @@ For the inertia tensors we can use the following formulas for the cylindrical an
 \[
     I^C_{cylinder} = \frac{1}{2}\begin{bmatrix}
         m(a^2+b^2) & 0 &0 \\
-        0 &m(3(a^2+b^2)^2+h^2)& 0 \\
-        0& 0& m(3(a^2+b^2)^2+h^2)
+        0 &m(3(a^2+b^2)+h^2)& 0 \\
+        0& 0& m(3(a^2+b^2)+h^2)
     \end{bmatrix}
 \]
 
 \[
     I^C_{prismatic} = \frac{1}{12}\begin{bmatrix}
         m(b^2+c^2) & 0 &0 \\
-        0 &m(a^2+c^2)^2& 0 \\
+        0 &m(a^2+c^2)& 0 \\
         0& 0& m(a^2+b^2)
     \end{bmatrix}
 \]
@@ -357,12 +357,12 @@ For the inertia tensors we can use the following formulas for the cylindrical an
 \]
 \[
     J^{\l_3}_{P} = \begin{bmatrix}
-        -sin(\theta_1)(\l_1 + \l_3h/2 + d_3) &0 & cos(\theta_1)\\
- cos(\theta_1)(\l_1 + \l_3h/2 + d_3) &0 &sin(\theta_1)\\
+        -sin(\theta_1)(\l_1 + \l_3/2 + d_3) &0 & cos(\theta_1)\\
+ cos(\theta_1)(\l_1 + \l_3/2 + d_3) &0 &sin(\theta_1)\\
                           0 &1 &      0
     \end{bmatrix}
     \qquad
-    J^{\l_1}_{O_j} = J^{\l_2}_{O_j} = J^{\l_3}_{O_j} =\begin{bmatrix}
+    J^{\l_1}_{O} = J^{\l_2}_{O} = J^{\l_3}_{O} =\begin{bmatrix}
         0 &0 &0\\ 0& 0 &0\\ 1& 0& 0
     \end{bmatrix}
 \]
