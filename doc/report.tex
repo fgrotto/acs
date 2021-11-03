@@ -10,6 +10,7 @@
 \usepackage{float}
 \usepackage{kpfonts}
 \usepackage{mathpazo}
+\usepackage{physics}
 \usepackage{enumitem}
 \setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt}
 
@@ -372,4 +373,25 @@ For the inertia tensors we can use the following formulas for the cylindrical an
 \]
 
 \noindent Finally we can recover the kinetic energy using the calculated $B(\textbf{q})$ and $ \dot{\textbf{q}}$.
+
+\subsection{Dynamic Model of the manipulator}
+The aim is to find an expression that describes the dynamic model of the manipulator:
+\[
+    B(q)\ddot{q} + C(q, \dot{q})\dot{q} + g(q) = \tau
+\]
+
+\noindent The matrix $B(q)$ was previously calculated as a sum of the contributions of each link and $g(q)$ can be easily derived by differentiating $U$ by the generalized positions $q = [\theta_1,d_2, d_3]$. In order to recover $C(q,\dot{q})$ some additional steps are required and described as follows:
+\begin{equation}
+    \begin{aligned}
+        \sum_{j=1}^{n} c_{ij}(q)\dot{q_j}  &= \sum_{j=1}^{n}\sum_{k=1}^{n} \frac{1}{2} (\pdv{b_{ij}}{q_k}+\pdv{b_{ik}}{q_j}-\pdv{b_{jk}}{q_i})\dot{q_k}\dot{q_j} \\
+         &= \sum_{j=1}^{n}\sum_{k=1}^{n} c_{ijk}\dot{q_k}\dot{q_j} \\
+         &= \sum_{j=1}^{n} c_{ij}\dot{q_j}
+    \end{aligned}
+\end{equation}
+
+\noindent A generalized formulation for the dynamic model of the manipulator is
+\[
+    B(q)\ddot{q} + C(q, \dot{q})\dot{q} + F_v\dot{q} + F_ssign(\dot{q}) + g(q) = \tau - J^{T}(q)h_e  
+\]
+
 \end{document}

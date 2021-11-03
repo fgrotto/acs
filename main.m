@@ -6,7 +6,7 @@ close all;
 robot = importrobot('RPP.urdf');
 showdetails(robot)
 
-figure;
+% figure;
 config = homeConfiguration(robot);
 config(1).JointPosition = pi/4;
 config(2).JointPosition = -0.2;
@@ -26,6 +26,7 @@ syms l3 real;
 syms t1 real;
 syms d2 real;
 syms d3 real;
+% syms pi real;
 
 %% Calculate Direct Kinematics
 
@@ -65,7 +66,7 @@ t1_calc = atan2(z-l0, x);
 d3;
 % The first solution is numerical valid but has no physical meaning so we
 % can easily drop it and use the second solution
-% d3_calc1 = -l1 - sqrt(l1^2+(x^2+(z-L0h)^2-l1^2)) - l3
+% d3_calc1 = -l1 - sqrt(l1^2+(x^2+(z-l0)^2-l1^2)) - l3
 d3_calc = -l1 + sqrt(l1^2+(x^2+(z-l0)^2-l1^2)) - l3;
 
 % You can compare it also with the robotic toolbox using the following
@@ -96,7 +97,7 @@ Ja = [-sin(t1)*(d3+l3+l1)    0   cos(t1);
         0                    0   0;];
 JaLinearVel =   jacobian(Pb_e, [t1;d2;d3]);
 JaOrientation = [1 0 0; 0 0 0; 0 0 0];
-Ja = [JaLinearVel; JaOrientation];
+Ja_sym = [JaLinearVel; JaOrientation];
 
 
 % Geometric Jacobians (from base to ee)
@@ -121,9 +122,11 @@ J0 = [J01 J02 J03];
 
 % Put together the upper and the lower part to obtain the full geometric
 % jacobian from the base frame to the end effector
-Jb_e_sym = [JP; J0];
+J = [JP; J0];
 geometricJacobian = geometricJacobian(robot, config, 'ee');
 
+
+%% Jacobians wrt of the frame 0
 % Let's calculate the geometric jacobian wrt of the 0 frame
 %
 % Manually computed version wrt of frame 0
@@ -208,6 +211,8 @@ pL(:,3) = H0_3(1:3,1:3)*pL3_3 + H0_3(1:3,4);
 % [(l1*sin(t1))/2, l1*sin(t1) - (l2*cos(t1))/2, sin(t1)*(l1 + l3/2 + d3)]
 % [              0,                      l2 + t2,                   l2 + t2]
 
+
+%% Potential Energy
 syms m1 real;
 syms m2 real;
 syms g real;
@@ -223,6 +228,8 @@ U3 = m3 * [0 -g 0] * pL(:,3);
 U = U1 + U2 + U3;
 U = simplify(U);
 
+
+%% Kinetic Energy
 syms r1 real;
 syms b2 real; % base of the prismatic joint to b2*b2
 syms b3 real; % base of the prismatic joint to b3*b3
@@ -299,21 +306,46 @@ B1 = m1 * (JPL1' * JPL1) + ((H0_1(1:3,1:3)'*JOL1)' * IL1_1 * H0_1(1:3,1:3)'*JOL1
 B2 = m2 * (JPL2' * JPL2) + ((H0_2(1:3,1:3)'*JOL2)' * IL2_2 * H0_2(1:3,1:3)'*JOL2);
 B3 = m3 * (JPL3' * JPL3) + ((H0_3(1:3,1:3)'*JOL3)' * IL3_3 * H0_3(1:3,1:3)'*JOL3);
 
+% The final matrix should have all eigenvalues > 0 (positive definite)
 B = B1 + B2 + B3;
 B = simplify(B);
 
 syms dt1 real;
 syms dd2 real;
 syms dd3 real;
+syms ddt1 real;
+syms ddd2 real;
+syms ddd3 real;
 dq = [dt1; dd2; dd3];
+ddq = [ddt1; ddd2; ddd3];
 T = 1/2*dq'*B*dq;
 
 T = simplify(T);
 
-%% Evaluate some results 
+
+%% Dynamic model of the manipulator (Lagrangian formulation)
+
+% Calculation of the C(q,d_q) matrix
+
+q = [t1,d2,d3];
+dof = 3;
+C = zeros(3, 'sym');
+for i=1:dof
+    for j=1:dof
+       for k = 1:dof
+            C(i,j) = C(i,j)+ 1/2*(diff(B(i,j),q(k))+diff(B(i,k),q(j))-diff(B(j,k),q(i)));
+       end
+    end
+end
+
+G = [diff(U, q(1)); diff(U, q(2)); diff(U, q(3))];
+G = simplify(G);
+
+
+%% Evaluate some results (B, U, T) using some real data from urdf
 
 % You can choose the values
-t1 = pi/4;
+t1 = pi;
 d3 = -0.2;
 d2 = -0.2;
 g = 9.81;
@@ -337,3 +369,18 @@ m3 = (b3*b3*l3) * density;
 eval(B)
 eval(U)
 eval(T)
+eval(C)
+
+% Write down the symbolic equation of the robot
+tau = B * ddq + C * dq + G;
+tau = simplify(tau);
+
+% Put some values in the velocities and accelerations
+dt1 = 2;
+dd2 = 2;
+dd3 = 2;
+ddt1 = 0;
+ddd2 = 0.1;
+ddd3 = 0.2;
+
+eval(tau)
