@@ -35,14 +35,8 @@ pL(:,3) = H0_3(1:3,1:3)*pL3_3 + H0_3(1:3,4);
 
 
 %% Potential Energy
-syms m1 real;
-syms m2 real;
-syms g real;
-syms m3 real;
 
-% Rotate from the base frame to zero
-R = [1 0 0; 0 0 -1; 0 1 0];
-% g0 was manually rotate using the rotation R
+% g0 was manually rotate using the rotation according to the proper axis
 U1 = m1 * [0 -g 0] * pL(:,1);
 U2 = m2 * [0 -g 0] * pL(:,2);
 U3 = m3 * [0 -g 0] * pL(:,3);
@@ -51,9 +45,6 @@ U = U1 + U2 + U3;
 U = simplify(U);
 
 %% Kinetic Energy
-syms r1 real;
-syms b2 real; % base of the prismatic joint to b2*b2
-syms b3 real; % base of the prismatic joint to b3*b3
 
 % Manually computed
 % IL1_1 = m1*[1/2*r1^2 0 0;
@@ -91,14 +82,5 @@ IL3_3 = simplify(H0_3(1:3,1:3) * L3I * H0_3(1:3,1:3)');
 partial_jacobians;
 inertia_matrix;
 
-syms dt1 real;
-syms dd2 real;
-syms dd3 real;
-syms ddt1 real;
-syms ddd2 real;
-syms ddd3 real;
-dq = [dt1; dd2; dd3];
-ddq = [ddt1; ddd2; ddd3];
-T = 1/2*dq'*B*dq;
-
+T = 1/2*[d_t1; d_d2; d_d3]'*B*[d_t1; d_d2; d_d3];
 T = simplify(T);

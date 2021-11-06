@@ -11,14 +11,53 @@ config(2).JointPosition = -0.2;
 config(3).JointPosition = -0.2;
 
 %% Put symbols used for the entire project according to our robot rpp
+% Links parameters
 syms l0 real;
 syms l1 real;
 syms l2 real;
 syms l3 real;
+syms r1 real;
+syms b2 real; % base of the prismatic joint to b2*b2
+syms b3 real; % base of the prismatic joint to b3*b3
+
+% Joint parameters (positions, velocites and accelerations) 
 syms t1 real;
 syms d2 real;
 syms d3 real;
+syms d_t1 real;
+syms d_d2 real;
+syms d_d3 real;
+syms dd_t1 real;
+syms dd_d2 real;
+syms dd_d3 real;
+
+% Masses of the links
+syms m1 real;
+syms m2 real;
+syms m3 real;
+syms g real;
+
+% Forces and torques for rne
+f_1 =  sym('f_1', [3 1], 'real');
+f_2 =  sym('f_2', [3 1], 'real');
+f_3 =  sym('f_3', [3 1], 'real');
+f_e =  sym('f_e', [3 1], 'real');
+mu_1 =  sym('mu_1', [3 1], 'real');
+mu_2 =  sym('mu_2', [3 1], 'real');
+mu_3 =  sym('mu_3', [3 1], 'real');
+mu_e =  sym('mu_e', [3 1], 'real');
+
+% Frictions coefficients for each joint
+Fvi = sym('Fvi',[3 1]);
+Fsi = sym('Fsi',[3 1]);
+
+% Group together joint values
+q = [t1,d2,d3];
+d_q = [d_t1,d_d2,d_d3];
+dd_q = [dd_t1,dd_d2,dd_d3];
+
 pi = sym(pi);
+dof = 3;
 
 kinematics_direct;
 kinematics_inverse;
@@ -26,47 +65,5 @@ kinematics_differential;
 energies;
 coriolis_matrix;
 gravity_matrix;
-
-
-%% Evaluate some results (B, U, T) and dynamic model of the manipulator (Lagrangian formulation)
-
-% You can choose the values
-t1 = pi;
-d3 = -0.2;
-d2 = -0.2;
-g = 9.81;
-
-% From the urdf provided
-l0 = 0.4;
-l3 = 0.3/2;
-l1 = 0.4;
-l2 = 0.46;
-r1 = 0.02;
-b2 = 0.03;
-b3 = 0.01;
-
-% Assuming homogenous volume and a density of aluminim
-density = 2700; % (kg/m^3)
-m1 = (pi*r1^2*l1) * density;
-m2 = (b2*b2*l2) * density;
-m3 = (b3*b3*l3) * density;
-
-% Evaluate B to check if it is positive definite
-eval(B)
-eval(U)
-eval(T)
-eval(C)
-
-% Write down the symbolic equation of the robot
-tau = B * ddq + C * dq + G;
-tau = simplify(tau);
-
-% Put some values in the velocities and accelerations
-dt1 = 2;
-dd2 = 2;
-dd3 = 2;
-ddt1 = 0;
-ddd2 = 0.1;
-ddd3 = 0.2;
-
-eval(tau)
+rne;
+evaluate_results;
