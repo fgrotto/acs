@@ -6,9 +6,12 @@ close all;
 robot = importrobot('RPP.urdf');
 showdetails(robot)
 config = homeConfiguration(robot);
-config(1).JointPosition = pi/4;
-config(2).JointPosition = -0.2;
-config(3).JointPosition = -0.2;
+config(1).JointPosition = 0;
+config(2).JointPosition = 0;
+config(3).JointPosition = 0;
+
+% figure;
+% show(robot,config);
 
 %% Put symbols used for the entire project according to our robot rpp
 % Links parameters

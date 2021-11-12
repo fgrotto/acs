@@ -2,7 +2,7 @@
 
 % Compute the position of CoM of link i with the respect of the frame i
 pL1_1 = [-l1/2; 0; 0];
-pL2_2 = [0; -l2/2; 0];
+pL2_2 = [0; l2/2; 0];
 pL3_3 = [0; 0; -l3/2]; 
 
 % Calculate the partial transformations for energy calculations
@@ -23,6 +23,10 @@ H0_2 = H0_1*H1_2;
 %                0 -1       0                 l2 + d2;
 %                0  0       0                        1];
 H0_3 = H0_1*H1_2*H2_3;
+
+% Hb_1 = Hb_0*H0_1;
+% Hb_2 = Hb_1*H1_2;
+% Hb_3 = Hb_2*H2_3;
 
 pL(:,1) = H0_1(1:3,1:3)*pL1_1 + H0_1(1:3,4);
 pL(:,2) = H0_2(1:3,1:3)*pL2_2 + H0_2(1:3,4);
@@ -60,9 +64,9 @@ U = simplify(U);
 %     0 0 b3^2+b3^2];
 
 % Cylinder Link 1
-L1I = m1 * [1/2*r1^2          0                  0 ; 
-            0    1/12*(3*r1^2 + l1^2)          0; 
-          0             0         1/12*(3*r1^2 + l1^2)] + steiner(m1, pL1_1);
+L1I = m1 * [1/2*(2*r1)^2          0                  0 ; 
+            0    1/2*(3*(2*r1)^2 + l1^2)          0; 
+          0             0         1/2*(3*(2*r1)^2 + l1^2)] + steiner(m1, pL1_1);
 
 % Prismatic Link 2
 L2I = m2 * [1/12*(b2^2 + l2^2)        0                0 ; 
