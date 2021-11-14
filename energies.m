@@ -24,9 +24,9 @@ H0_2 = H0_1*H1_2;
 %                0  0       0                        1];
 H0_3 = H0_1*H1_2*H2_3;
 
-% Hb_1 = Hb_0*H0_1;
-% Hb_2 = Hb_1*H1_2;
-% Hb_3 = Hb_2*H2_3;
+Hb_1 = Hb_0*H0_1;
+Hb_2 = Hb_1*H1_2;
+Hb_3 = Hb_2*H2_3;
 
 pL(:,1) = H0_1(1:3,1:3)*pL1_1 + H0_1(1:3,4);
 pL(:,2) = H0_2(1:3,1:3)*pL2_2 + H0_2(1:3,4);
@@ -40,7 +40,6 @@ pL(:,3) = H0_3(1:3,1:3)*pL3_3 + H0_3(1:3,4);
 
 %% Potential Energy
 
-% g0 was manually rotate using the rotation according to the proper axis
 U1 = m1 * [0 -g 0] * pL(:,1);
 U2 = m2 * [0 -g 0] * pL(:,2);
 U3 = m3 * [0 -g 0] * pL(:,3);
@@ -64,19 +63,22 @@ U = simplify(U);
 %     0 0 b3^2+b3^2];
 
 % Cylinder Link 1
-L1I = m1 * [1/2*(2*r1)^2          0                  0 ; 
+I1 = m1 * [1/2*(2*r1)^2          0                  0 ; 
             0    1/2*(3*(2*r1)^2 + l1^2)          0; 
-          0             0         1/2*(3*(2*r1)^2 + l1^2)] + steiner(m1, pL1_1);
+          0             0         1/2*(3*(2*r1)^2 + l1^2)];
+L1I = I1 + steiner(m1, pL1_1);
 
 % Prismatic Link 2
-L2I = m2 * [1/12*(b2^2 + l2^2)        0                0 ; 
+I2 =  m2 * [1/12*(b2^2 + l2^2)        0                0 ; 
                 0         1/12*(b2^2 + l2^2)        0 ; 
-                0                0         1/12*(b2^2 + b2^2)]  + steiner(m2, pL2_2);
+                0                0         1/12*(b2^2 + b2^2)];
+L2I = I2 + steiner(m2, pL2_2);
 
 % Prismatic Link 3
-L3I = m3 * [1/12*(b3^2 + l3^2)        0                0 ; 
+I3 = m3 * [1/12*(b3^2 + l3^2)        0                0 ; 
                 0         1/12*(b3^2 + l3^2)        0 ; 
-                0                0         1/12*(b3^2 + b3^2)] + steiner(m3, pL3_3);
+                0                0         1/12*(b3^2 + b3^2)];
+L3I = I3 + steiner(m3, pL3_3);
 
             
 IL1_1 = simplify(H0_1(1:3,1:3) * L1I * H0_1(1:3,1:3)');

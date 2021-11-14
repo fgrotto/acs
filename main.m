@@ -39,6 +39,7 @@ syms m1 real;
 syms m2 real;
 syms m3 real;
 syms g real;
+pi = sym(pi);
 
 % Forces and torques for rne
 f_1 =  sym('f_1', [3 1], 'real');
@@ -58,15 +59,13 @@ Fsi = sym('Fsi',[3 1]);
 q = [t1,d2,d3];
 d_q = [d_t1,d_d2,d_d3];
 dd_q = [dd_t1,dd_d2,dd_d3];
-
-pi = sym(pi);
 dof = 3;
 
 kinematics_direct;
 kinematics_inverse;
 kinematics_differential;
 energies;
-coriolis_matrix;
+coriolis_centrifugal_matrix;
 gravity_matrix;
 rne;
 evaluate_results;

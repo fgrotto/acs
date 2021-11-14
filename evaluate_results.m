@@ -1,10 +1,10 @@
 %% Evaluate some results (B, U, T) and dynamic model of the manipulator (Lagrangian formulation)
 
 % You can choose the values for positions, velocites and accelerations
-t1 = 0;
+t1 = 0; %-pi/2
 d3 = 0;
 d2 = 0;
-d_t1 = 0;
+d_t1 = 0; %0.1
 d_d2 = 0;
 d_d3 = 0;
 dd_t1 = 0;
@@ -45,9 +45,8 @@ eval(C);
 % Write down the symbolic equation of the robot
 tau = B * [dd_t1; dd_d2; dd_d3] + C * [d_t1; d_d2; d_d3] + G;
 tau = simplify(tau);
-eval(tau);
+eval(tau)
 
 % Evaluate rne
-eval(tau1)
-eval(tau2)
-eval(tau3)
+tau_rne = [tau1; tau2; tau3];
+eval(tau_rne)
