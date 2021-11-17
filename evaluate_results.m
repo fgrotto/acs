@@ -1,10 +1,10 @@
 %% Evaluate some results (B, U, T) and dynamic model of the manipulator (Lagrangian formulation)
 
 % You can choose the values for positions, velocites and accelerations
-t1 = 0; %-pi/2
-d3 = 0;
+t1 = pi/4;
 d2 = 0;
-d_t1 = 0; %0.1
+d3 = 0;
+d_t1 = 0;
 d_d2 = 0;
 d_d3 = 0;
 dd_t1 = 0;

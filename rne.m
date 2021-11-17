@@ -2,7 +2,7 @@
 z0 = [0 0 1]';
 w0_0 = [0 0 0]';
 d_w0_0 = [0 0 0]';
-dd_p0_0 = [0 -g 0]';
+dd_p0_0 = [0 g 0]';
 
 R0_1 = H0_1(1:3,1:3);
 R1_2 = H1_2(1:3,1:3);
@@ -44,7 +44,7 @@ d_w2_m3 = d_w2_2;
 
 
 %% Backward Newton Euler Formulation 
-he = [f_1; f_2; f_3; f_e; mu_1; mu_2; mu_3; mu_e];
+he = [f_e; mu_e];
 
 % Third prismatic joint
 f_3 = R3_e*f_e+m3*dd_p3_c3;
