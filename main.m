@@ -34,6 +34,10 @@ syms dd_t1 real;
 syms dd_d2 real;
 syms dd_d3 real;
 
+% Operational space variables (dynamic model)
+syms x_dd y_dd z_dd phi_dd theta_dd psi_dd real;
+dd_x = [x_dd; y_dd; z_dd; phi_dd; theta_dd; psi_dd];
+
 % Masses of the links
 syms m1 real;
 syms m2 real;
@@ -68,4 +72,5 @@ energies;
 coriolis_centrifugal_matrix;
 gravity_matrix;
 rne;
+operational_space_dynamic_model;
 evaluate_results;

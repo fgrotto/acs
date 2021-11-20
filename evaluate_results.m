@@ -1,7 +1,7 @@
 %% Evaluate some results (B, U, T) and dynamic model of the manipulator (Lagrangian formulation)
 
 % You can choose the values for positions, velocites and accelerations
-t1 = pi/4;
+t1 = 0;
 d2 = 0;
 d3 = 0;
 d_t1 = 0;
@@ -50,3 +50,19 @@ eval(tau)
 % Evaluate rne
 tau_rne = [tau1; tau2; tau3];
 eval(tau_rne)
+
+% Evaluate dynamic model operational space
+he = [f_e1; f_e2; f_e3; mu_e1; mu_e2; mu_e3];
+ue = Ta'*he;
+
+% Add operational space variables
+x_dd = 0; 
+y_dd = 0; 
+z_dd = 0;
+phi_dd = 0;
+theta_dd = 0;
+psi_dd = 0;
+
+% u_operational = Ta'*h;
+u_operational = simplify(Ba*dd_x+Ca_dx+ga + ue);
+eval(u_operational)

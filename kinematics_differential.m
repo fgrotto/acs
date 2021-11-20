@@ -79,12 +79,3 @@ Ja0_e = [-sin(t1)*(l1 + l3 + d3) 0 cos(t1);
 JaLinearVel =   jacobian(P0_e, [t1;d2;d3]);
 JaOrientation = [1 0 0; 0 0 0; 0 0 0];
 Ja0_e_sym = [JaLinearVel; JaOrientation];
-
-% syms ph;
-% syms th;
-% Ta = [1 0, 0, 0,        0,               0;
-% 0 1, 0 0        0               0;
-% 0 0, 1 0        0               0;
-% 0 0, 0 0 -sin(ph) cos(ph)*sin(th);b3^2*m3
-% 0 0, 0 0  cos(ph) sin(ph)*sin(th);
-% 0 0, 0 1        0         cos(th)]
