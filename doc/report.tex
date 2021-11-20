@@ -268,7 +268,7 @@ Let's calculate $p_{\l_i}$ of the center of mass wrt of $\Sigma_0$. To get them 
 p_{\l_1}^{1} = \begin{bmatrix}  - \frac{\l_1}{2} \\ 0 \\ 0 \end{bmatrix}
 \qquad
 \qquad
-p_{\l_2}^{2} = \begin{bmatrix} 0 \\ - \frac{\l_2}{2} \\ 0 \end{bmatrix}
+p_{\l_2}^{2} = \begin{bmatrix} 0 \\ \frac{\l_2}{2} \\ 0 \end{bmatrix}
 \qquad
 \qquad
 p_{\l_3}^{3} = \begin{bmatrix} 0 \\ 0 \\  - \frac{\l_3}{2} \end{bmatrix}
@@ -289,7 +289,7 @@ The potential energy is calculated according to the formula:
 \]
 \noindent The total potential energy is the sum of the 3 contributions $U_1$ $U_2$ and $U_3$. The total expression is reported and was calculated using the MATLAB symbolic toolbox ($L_{ih}$ is the length of i-th link and $m_i$ is the mass)
 \[
-    U = \frac{-gsin(\theta_1)(l_{1}m_1 + 2l_{1}m_2 + 2l_{1}m_3 + l_{3}m_3 + 2d_3m_3)}{2}  
+    U = \frac{gsin(\theta_1)(l_{1}m_1 + 2l_{1}m_2 + 2l_{1}m_3 + l_{3}m_3 + 2d_3m_3)}{2}  
 \]
 
 \subsection{Kinetic Energy}
@@ -393,5 +393,30 @@ The aim is to find an expression that describes the dynamic model of the manipul
 \[
     B(q)\ddot{q} + C(q, \dot{q})\dot{q} + F_v\dot{q} + F_ssign(\dot{q}) + g(q) = \tau - J^{T}(q)h_e  
 \]
+\subsection{Recursive Newton Euler}
+The recursive newton euler has been implemented for the RPP robot. The calculations are lengthy and are not reported here. The results have been compared with the lagrangian model and using the following facts:
+
+\[
+    g(q) = NE(q,0,0,g_0)
+\]
+\[
+    C(q,\dot{q})\dot{q} = NE(q,\dot{q},0,0)
+\]
+\[
+    B_i(q) = NE(q,0,e_i,0) \qquad e_i = \text{i-th element equal to 1}
+\]
+
+\section{Control architectures}
+\subsection{Joint Space PD Control with Gravity Compensation}
+
+The joint space PD Control with gravity compensation was implemented using an S-function to define the manipulator dynamics. In fact the symbolic B,C and G matrixes were used in this context. The values for $Kp$ and $Kd$ has been properly selected for our robot. In Fig \ref{fig:gravity_comp} a plot of the positions with respect of the desired positions are reported as well as the related $tau$ applied to each of the three joints.
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-4.5cm}
+        \includegraphics[scale=0.5]{images/gravity_comp.eps}
+    \end{center}
+    \caption{Joint Space PD Control with Gravity Compensation}
+    \label{fig:gravity_comp}
+\end{figure}
 
 \end{document}
