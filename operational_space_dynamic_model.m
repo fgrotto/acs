@@ -11,7 +11,17 @@ Ta = [1 0, 0, 0, 0, 0;
 % This should be identical to the one calculated by hand Ja
 % Ja_transformed = Ta*J; Ja0_e and Ja
 Ja0_e = simplify(Ja0_e);
-Ja0_e_d = diff(Ja0_e);
+
+t = sym('t', 'real');
+q_time = [symfun('t1(t)', t), symfun('d2(t)', t), symfun('d3(t)', t)];
+dq_time = diff(q_time);
+ddq_time = diff(dq_time);
+
+Ja_time = subs(Ja0_e, q, q_time);
+dJa_time = diff(Ja_time);
+
+
+Ja0_e_d = simplify(subs(diff(Ja_time,t), [dq_time,q_time], [d_q,q]));
 
 syms f_e1 real;
 syms f_e2 real;
