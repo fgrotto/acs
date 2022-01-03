@@ -473,9 +473,9 @@ Finally I can set a disturbance to the input as a sinuoidal function and see the
 \end{figure}
 
 \newpage 
-\subsection{Inverse Dynamic PD control}
+\subsection{Joint Space Inverse Dynamic PD control}
 
-The inverse dynamics PD control architecture was introduced to solve the tracking problem using the 3DOF manipulator. In Fig \ref{fig:inv_dyn} and example of the response obtained using a polynomial trajectory with waypoints in (0,3,5) is reported.
+The joint space inverse dynamics PD control architecture was introduced to solve the tracking problem using the 3DOF manipulator. In Fig \ref{fig:inv_dyn} and example of the response obtained using a polynomial trajectory with waypoints in (0,3,5) is reported.
 \begin{figure}[H]
     \begin{center}
         \hspace*{-4.5cm}
@@ -552,7 +552,17 @@ The desired configuration is $q = (0, 0.2, 0)$ in which the joint 1 and partiall
 \end{figure}
 
 \newpage
+\subsection{Operational Space Inverse Dynamic PD control}
 
+The operational space inverse dynamics PD control architecture was introduced to solve the tracking problem using the 3DOF manipulator. In Fig \ref{fig:op_inv_dyn} an example of the response obtained using a polynomial trajectory. The waypoints provided are $ q = [0,2,3;1,3,1;0,1,1] $ at time $t = [ 0, 2, 4 ] $
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-4.5cm}
+        \includegraphics[scale=0.5]{images/op_inv_dyn.eps}
+    \end{center}
+    \caption{Operational Space Inverse dynamic PD control}
+    \label{fig:op_inv_dyn}
+\end{figure}
 
 
 \end{document}
