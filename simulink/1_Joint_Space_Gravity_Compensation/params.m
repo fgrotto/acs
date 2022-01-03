@@ -19,11 +19,11 @@ param.g = 9.81;
 he = zeros(6,1);
 
 % Desired positions
-qd = [0.3, 0.45, 0.2];
+qd = [0.3, 0.2, 0.1];
 
 % PD Controller parameters
-Kp = diag([700 700 700]);
-Kd = diag([50 50 50]);
+Kp = diag([400 380 250]);
+Kd = diag([30 40 15]);
 
 
 

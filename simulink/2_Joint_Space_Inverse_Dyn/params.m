@@ -18,8 +18,9 @@ param.g = 9.81;
 param.Fsv = 0;
 
 % PD Controller parameters
-Kp = diag([700 700 700]);
-Kd = diag([50 50 50]);
+Kp = diag([600 380 250]);
+Kd = diag([200 40 15]);
+
 
 
 

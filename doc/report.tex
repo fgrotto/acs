@@ -406,6 +406,7 @@ The recursive newton euler has been implemented for the RPP robot. The calculati
     B_i(q) = NE(q,0,e_i,0) \qquad e_i = \text{i-th element equal to 1}
 \]
 
+\newpage 
 \section{Control architectures}
 \subsection{Joint Space PD Control with Gravity Compensation}
 
@@ -418,5 +419,140 @@ The joint space PD Control with gravity compensation was implemented using an S-
     \caption{Joint Space PD Control with Gravity Compensation}
     \label{fig:gravity_comp}
 \end{figure}
+
+It is reasonable to tune the 3 joints to get the same time for tracking or at least try to be at the same time. As it is visible from Fig \ref{fig:gravity_comp} we have to find a compromise between performances and the $tau$ required.
+
+\newpage
+\subsubsection{Without gravity compensation}
+Let's try without the gravity compensation, in Fig \ref{fig:gravity_comp_no_gravity} it's visible that we have an offset in steady-state where the gravity plays a role, in the RPP robot it's the first joint, which is clearly visible, and on the third joint depending on the configuration (in this case the effect is really limited to to the configuration).
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-4.5cm}
+        \includegraphics[scale=0.5]{images/gravity_comp_no_gravity.eps}
+    \end{center}
+    \caption{Joint Space PD Control without Gravity Compensation}
+    \label{fig:gravity_comp_no_gravity}
+\end{figure}
+
+\newpage
+\subsubsection{With fixed $q_d$ for gravity compensation}
+Finally let's compare the result obtained with gravity with fixed or time-varying $q_d$. In Fig \ref{fig:gravity_comp_fixed} a small portion of the response of the first joint is reported to show the small differences using a fixed $q_d$ for the gravity compensation vs the time-varying one.
+
+\begin{figure}[H]
+    \begin{center}
+        \includegraphics[scale=0.4]{images/gravity_comp_fixed.eps}
+    \end{center}
+    \caption{Joint Space PD Control with Gravity and fixed vs variable $q_d$}
+    \label{fig:gravity_comp_fixed}
+\end{figure}
+
+\subsubsection{For the tracking problem}
+
+This control architecture can also be used, with acceptable results, for the tracking error if we don't need perfect results. The step response was achived with zero steady-state error thanks to the internal model principle (an integrator is embedded into the system thanks to the gravity compensation). This is not true, for example, for a sinusoidal function and the response is always late with respect of the reference signal. This behaviour is reported in Fig \ref{fig:gravity_comp_tracking}.
+
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-4.5cm}
+        \includegraphics[scale=0.5]{images/gravity_comp_tracking.eps}
+    \end{center}
+    \caption{Joint Space PD Control with Gravity Compensation for tracking problem}
+    \label{fig:gravity_comp_tracking}
+\end{figure}
+
+\subsubsection{With gravity compensation and noisy reference}
+
+Finally I can set a disturbance to the input as a sinuoidal function and see the effect on the torque of the related joints. The feedback will try to mitigate this effect and counteract this signal. This effect is reported in Fig \ref{fig:gravity_comp_noise}.
+
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-4.5cm}
+        \includegraphics[scale=0.5]{images/gravity_comp_noise.eps}
+    \end{center}
+    \caption{Joint Space PD Control with Gravity Compensation with noisy reference}
+    \label{fig:gravity_comp_noise}
+\end{figure}
+
+\newpage 
+\subsection{Inverse Dynamic PD control}
+
+The inverse dynamics PD control architecture was introduced to solve the tracking problem using the 3DOF manipulator. In Fig \ref{fig:inv_dyn} and example of the response obtained using a polynomial trajectory with waypoints in (0,3,5) is reported.
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-4.5cm}
+        \includegraphics[scale=0.5]{images/inv_dyn.eps}
+    \end{center}
+    \caption{Inverse dynamic PD control}
+    \label{fig:inv_dyn}
+\end{figure}
+
+In order to decrease settling time we can increase $K_p$ and $K_d$. Using the perfect linearization (second order system) it looks like we can obtain what we like but it's not true we need too much torque and in real life saturation limits play a big role!
+
+We can try to introduce a saturation in $tau$ with the identical saturation for each joint (in real life it's different for each joint). As a result we obtain huge overshoot and settling time is higher. (Note: we have an integrator in the plant we can't implement an antiwindup in fact we don't have it in the control side).
+
+\subsubsection{With G, B, C different than \^{G}, \^{B}, \^{C}}
+
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-4.5cm}
+        \includegraphics[scale=0.5]{images/inv_dyn_app.eps}
+    \end{center}
+    \caption{Inverse dynamic PD control with errors in the estimation of the dynamic parameters ($m_1$ and $m_3$ double than the real values)}
+    \label{fig:inv_dyn_app}
+\end{figure}
+
+From Fig \ref{fig:inv_dyn_app} it is possible to see that the third joint is clearly affected by the wrong estimation. 
+
+\subsubsection{Without gravity term in $n(q,\dot{q})$}
+
+In Fig \ref{fig:inv_dyn_no_grav} the gravity was removed from the $n(q,\dot{q})$ term which strongly affects the joints 1 and 3, joint 2 is not affected by gravity as it is clearly visible.
+
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-4.5cm}
+        \includegraphics[scale=0.5]{images/inv_dyn_no_grav.eps}
+    \end{center}
+    \caption{Inverse dynamic PD control without gravity in $n$ term)}
+    \label{fig:inv_dyn_no_grav}
+\end{figure}
+
+\subsubsection{Extra considerations}
+
+\begin{itemize}
+\item We can also try to cut $C(q,\dot{q})$ from the architecture and the result in steady state is exactly the same in fact $\dot{q} = 0 $ it doesn't play any role. 
+
+\item We can also try to cut $B(q)$, in this case it is responsible for the decoupling of the joints so if we apply a step to only one joint we should see that without the $B(q)$ the joints are coupled.
+
+\item n time-invariant, linear and decoupled second-order systems. we can choose \[ Kp =  \left \{ w_{n1}^2 , \dots \right \} \] \[ Kd = \left \{2\xi_1 w_{n1}, \dots \right \} \]
+\end{itemize}
+
+\newpage
+\subsection{Operational Space PD control with graviy compensation}
+
+The result obtained by the PD with gravity compensation in the operational space is reported in Fig \ref{fig:gravity_op}. The robot has 3DOF so it is not possible to force the 3 positions and 3 orientations as we want. To obtained the following results I started from a joint configuration which was translated into the operational space $q = (0.2, 0.2, 0.1)$. The results are provided wrt of frame 0.
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-4.5cm}
+        \includegraphics[scale=0.5]{images/op_gravity.eps}
+    \end{center}
+    \caption{Operational Space PD control with graviy compensation}
+    \label{fig:gravity_op}
+\end{figure}
+
+\subsubsection{Without gravity}
+
+The desired configuration is $q = (0, 0.2, 0)$ in which the joint 1 and partially joint 3 are responsible for the gravity compensation as it is visible. As it is visible $x$ and $y$ don't compensate anymore (wrt of frame 0).
+
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-4.5cm}
+        \includegraphics[scale=0.5]{images/op_without_gravity.eps}
+    \end{center}
+    \caption{Operational Space PD control without graviy compensation}
+    \label{fig:without_gravity_op}
+\end{figure}
+
+\newpage
+
+
 
 \end{document}
