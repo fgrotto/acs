@@ -20,9 +20,9 @@ l1 = param.l1;
 l2 = param.l2;
 l3 = param.l3;
 
-t1 = 0;
-d2 = 0.2;
-d3 = 0;
+t1 = 0.1;
+d2 = -0.2;
+d3 = 0.1;
 
 % H0_3 computed with the main.m
 H = [[0,  sin(t1), cos(t1), cos(t1)*(d3 + l3) + l1*cos(t1)]

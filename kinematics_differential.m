@@ -68,7 +68,7 @@ J0 = [J01 J02 J03];
 % jacobian from the 0 frame to the ee
 J0_e_sym = [JP; J0];
 
-% Manually computer analytical jacobian wrt of frame 0
+% Manually computed analytical jacobian wrt of frame 0
 Ja0_e = [-sin(t1)*(l1 + l3 + d3) 0 cos(t1);
  cos(t1)*(l1 + l3 + d3) 0           sin(t1);
                         0 1         0;
