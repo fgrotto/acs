@@ -21,24 +21,23 @@ l1 = param.l1;
 l2 = param.l2;
 l3 = param.l3;
 
-t1 = 0.2;
-d2 = 0.2;
-d3 = 0.1;
+% t1 = 0.2;
+% d2 = 0.2;
+% d3 = 0.1;
 
-% H0_3 computed with the main.m
-H = [[0,  sin(t1), cos(t1), cos(t1)*(d3 + l3) + l1*cos(t1)]
-    [0, -cos(t1), sin(t1), sin(t1)*(d3 + l3) + l1*sin(t1)]
-    [1,        0,       0,                        d2 + l2]
-    [0,        0,       0,                              1]];
-
-
-% Return x with positions and orientations
-xd = [ H(1:3,4); rotm2eul(H(1:3,1:3), 'ZYZ')'];
+% % H0_3 computed with the main.m
+% H = [[0,  sin(t1), cos(t1), cos(t1)*(d3 + l3) + l1*cos(t1)]
+%     [0, -cos(t1), sin(t1), sin(t1)*(d3 + l3) + l1*sin(t1)]
+%     [1,        0,       0,                        d2 + l2]
+%     [0,        0,       0,                              1]];
+% 
+% 
+% % Return x with positions and orientations
+% xd = [ H(1:3,4); rotm2eul(H(1:3,1:3), 'ZYZ')'];
 
 % PD Controller parameters
-Kp = diag([700 700 700 1 1 1]);
-Kd = diag([50 50 50 1 1 1]);
-
+Kp = diag([700 900 700 1 1 1]);
+Kd = diag([50 70 50 1 1 1]);
 
 
 

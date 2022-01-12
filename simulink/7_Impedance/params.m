@@ -21,16 +21,19 @@ l1 = param.l1;
 l2 = param.l2;
 l3 = param.l3;
 
-Kp = diag([100 50 100 1 1 1]);
+Kp = diag([500 50 100 1 1 1]);
 Kd = diag([30 1 14 1 1 1]);
 Md = diag([1 1 1 1 1 1]);
 inv_Md = inv(Md);
 
 % Environment like a box (3 walls in front of the robot)
-K = 0.1*diag([1 1 1 1 1 1]);
-param.Env = [0.6 10 10]; % wrt of frame 0
+K = 10*diag([1 1 1 1 1 1]);
 param.Kp = Kp;
 param.K = K;
+
+% Environment only one component for a simplified force control
+param.wall = 0.6;
+param.axis = 1; % 1-x 2-y 3-z wrt of frame 0
 
 
 %% Calculation of derivative of Jacobians
@@ -56,6 +59,33 @@ param.K = K;
 % dq_time = diff(q_time);
 % 
 % J_time = subs(J, q, q_time);
+% dJ_time = diff(J_time);
+% 
+% d_J = simplify(subs(diff(J_time,t), [dq_time,q_time], [d_q,q]));
+
+% %%
+%     
+% syms phi real;
+% syms theta real;
+% syms phi_dot real;
+% syms theta_dot real;
+% 
+% q = [phi, theta];
+% d_q = [phi_dot, theta_dot]; 
+% 
+% Ta =  [1, 0, 0, 0, 0, 0;
+%             0, 1, 0, 0, 0, 0;
+%             0, 0, 1, 0, 0, 0;
+%             0, 0, 0, 0, -sin(phi), cos(phi) * sin(theta);
+%             0, 0, 0, 0, cos(phi), sin(phi) * sin(theta);
+%             0, 0, 0, 1, 0, cos(theta)];
+% Ta_inv = pinv(Ta);
+%     
+% t = sym('t', 'real');
+% q_time = [symfun('phi(t)', t), symfun('theta(t)', t)];
+% dq_time = diff(q_time);
+% 
+% J_time = subs(Ta, q, q_time);
 % dJ_time = diff(J_time);
 % 
 % d_J = simplify(subs(diff(J_time,t), [dq_time,q_time], [d_q,q]));

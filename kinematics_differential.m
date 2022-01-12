@@ -51,10 +51,11 @@ geometricJacobian = geometricJacobian(robot, config, 'ee');
 %                         0 0       0;
 %                         1 0       0]
 %
-tmp1 = (H0_1*H1_2);
-tmp2 = (H0_1*H1_2*H2_3);
-P0_e = tmp2(1:3,4);
-JP1 = cross(H0_1(1:3,3), P0_e-H0_1(1:3,4));
+tmp1 = (H0_1);
+tmp2 = (H0_1*H1_2);
+tmp3 = (H0_1*H1_2*H2_3);
+P0_e = tmp3(1:3,4);
+JP1 = cross(H0_1(1:3,3), P0_e);
 JP2 = tmp1(1:3,3); 
 JP3 = tmp2(1:3,3); 
 J01 = H0_1(1:3,3);

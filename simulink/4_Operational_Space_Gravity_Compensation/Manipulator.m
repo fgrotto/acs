@@ -38,7 +38,7 @@ function sys=mdlDerivatives(t, x, u,param)
     B = double(B_Lagrangian(q, param));
     C = double(C_Lagrangian(q, d_q, param));
     G = double(G_Lagrangian(q, param));
-    J = double(Jacobian(q, param));
+%     J = double(Jacobian(q, param));
     
     dd_q = inv(B)*(tau - C*d_q - G);
     %dd_q = inv(B)*(tau - C*d_q - G - J'*he);
