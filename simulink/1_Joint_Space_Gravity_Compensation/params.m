@@ -1,4 +1,5 @@
-clear;
+clear all;
+addpath("/home/filippo/univr/acs/simulink/model/.");
 
 % URDF Parameters
 param.m1 = 1.3565;

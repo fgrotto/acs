@@ -1,4 +1,5 @@
-clear;
+clear all;
+addpath("/home/filippo/univr/acs/simulink/model/.");
 
 % URDF Parameters
 param.m1 = 1.3565;
@@ -25,15 +26,7 @@ t1 = 0.2;
 d2 = 0.2;
 d3 = 0.1;
 
-% H0_3 computed with the main.m
-H = [[0,  sin(t1), cos(t1), cos(t1)*(d3 + l3) + l1*cos(t1)]
-    [0, -cos(t1), sin(t1), sin(t1)*(d3 + l3) + l1*sin(t1)]
-    [1,        0,       0,                        d2 + l2]
-    [0,        0,       0,                              1]];
-
-
-% Return x with positions and orientations
-xd = [ H(1:3,4); rotm2eul(H(1:3,1:3), 'ZYZ')'];
+xd = Kinematics([t1,d2,d3],param);
 
 % Environment only one component for a simplified force control
 param.wall = 0.2;
