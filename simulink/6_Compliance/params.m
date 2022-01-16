@@ -28,10 +28,10 @@ d3 = 0.1;
 xd = Kinematics([t1,d2,d3], param);
 
 % PD Controller parameters
-Kp = diag([100 100 80 1 1 1]);
-Kd = diag([20 10 10 1 1 1]);
+Kp = diag([50 80 100 1 1 1]);
+Kd = diag([2 10 30 1 1 1]);
 
-K = 50*diag([1 1 1 1 1 1]);
+K = 5*diag([1 1 1 1 1 1]);
 param.Kp = Kp;
 param.K = K;
 

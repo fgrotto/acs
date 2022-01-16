@@ -10,5 +10,6 @@ function J = Jacobian(q, param)
                                 0 0       0;
                                 0 0       0;
                                 1 0       0];
+    J = double(J);
 end
 

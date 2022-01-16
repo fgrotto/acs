@@ -23,7 +23,7 @@ l3 = param.l3;
 
 t1 = 0.1;
 d2 = -0.2;
-d3 = 0.1;
+d3 = 0.05;
 
 xd = Kinematics([t1,d2,d3], param);
 

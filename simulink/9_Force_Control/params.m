@@ -22,23 +22,17 @@ l1 = param.l1;
 l2 = param.l2;
 l3 = param.l3;
 
-t1 = 0.2;
-d2 = 0.2;
-d3 = 0.1;
-
-xd = Kinematics([t1,d2,d3],param);
-
 % Environment only one component for a simplified force control
-param.wall = 0.2;
+param.wall = 0.1;
 param.axis = 2; % 1-x 2-y 3-z wrt of frame 0
-param.K = diag([10 100 10 0 0 0]);
+param.K = diag([10 10 10 0 0 0]);
 
 % Desired Force
-Fd = [0 0.2 0 0 0 0];
+Fd = [0 0.1 0 0 0 0];
 
 % Impedance
 % PD Controller parameters
-Kp = diag([700 700 700 1 1 1]);
+Kp = diag([700 200 700 1 1 1]);
 Kd = diag([50 50 50 1 1 1]);
 Md = diag([1 1 1 1 1 1]);
 inv_Md = inv(Md);

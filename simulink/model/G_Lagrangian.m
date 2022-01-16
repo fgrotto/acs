@@ -11,7 +11,7 @@ function G = G_Lagrangian(q, param)
 
 
     G = [ (g*cos(t1)*(2*d3*m3 + l1*m1 + 2*l1*m2 + 2*l1*m3 + l3*m3))/2;
-                                                              0;
-                                                   g*m3*sin(t1)];
+                                                          0;
+                                               g*m3*sin(t1)];
 end
 
