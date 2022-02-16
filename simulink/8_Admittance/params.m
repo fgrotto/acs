@@ -22,7 +22,7 @@ l1 = param.l1;
 l2 = param.l2;
 l3 = param.l3;
 
-Kp = diag([500 100 100 1 1 1]);
+Kp = diag([500 300 100 1 1 1]);
 Kd = diag([30 20 14 1 1 1]);
 Md = diag([1 1 1 1 1 1]);
 inv_Md = inv(Md);
