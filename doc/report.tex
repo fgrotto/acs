@@ -12,6 +12,7 @@
 \usepackage{mathpazo}
 \usepackage{physics}
 \usepackage{enumitem}
+\newtheorem{theorem}{Theorem}
 \setitemize{noitemsep,topsep=0pt,parsep=0pt,partopsep=0pt}
 
 \renewcommand*{\a}{\alpha}
@@ -32,6 +33,19 @@
 \maketitle
 \tableofcontents
 
+\newpage
+\section{Homework List}
+\begin{itemize}
+    \item HW 1: Direct, inverse, differential kinematics
+    \item HW 2: Compute kinetic and potential energy
+    \item HW 3: Compute the equations of motion (dynamic model)
+    \item HW 4: Compute RNE formulation
+    \item HW 5: Compute the dynamic model in the operational space
+    \item HW 6: Joint space PD control
+    \item HW 7: Joint Space Inverse Dynamics Control
+\end{itemize}
+
+\newpage
 \section{Kinematics}
 
 \subsection{Direct Kinematics}
@@ -49,7 +63,7 @@
     \hline
     $b-0$ & $\l_0$ &    $0$ &    $0$    & $\frac{\pi}{2}$ \\
     $0-1$ &    $0$    & $\t_1$ & $\l_1$ &        $0$ \\
-    $1-2$ &    $\l_2+d_2$    & $\frac{\pi}{2}$ & $0$ &        $\frac{\pi}{2}$ \\
+    $1-2$ &    $\l_2+d_2$    & -$\frac{\pi}{2}$ & $0$ &        -$\frac{\pi}{2}$ \\
     $2-3$ &    $\l_3+d_3$ &    $\frac{\pi}{2}$ &    $0$    &        $0$ \\
     $3-e$ &    $0$    &    $0$ &    $0$    &        $0$ \\
     \hline
@@ -83,8 +97,8 @@ H^0_1(\t_1) = \begin{bmatrix}
 \qquad
 H^1_2(d_2) = \begin{bmatrix}
     0 &  0 & 1 & 0 \\
-    1 & 0 & 0 & 0 \\
-        0    &    1    & 0 &        d_2+\l_2       \\
+    -1 & 0 & 0 & 0 \\
+        0    &    -1    & 0 &        d_2+\l_2       \\
         0    &     0    & 0 &        1        \\
 \end{bmatrix}
 \]
@@ -107,8 +121,15 @@ H^3_e = \begin{bmatrix}
 \[
 H^b_e(\q) = \begin{bmatrix}
     0    &  - s_1 & c_1 & c_1(\l_1+\l_3+d_3)\\
-    -1   & 0      &  0  &  -\l_2 - d_2 \\
-    0    & -c_{1} & s_1 & s_1(\l_1+\l_3+d_3) + \l_0 \\
+    1   & 0      &  0  &  -\l_2 - d_2 \\
+    0    & c_{1} & s_1 & s_1(\l_1+\l_3+d_3) + \l_0 \\
+    0    &     0  & 0   &        1       \\
+\end{bmatrix}
+\qquad
+H^0_e(\q) = \begin{bmatrix}
+    0    &  - s_1 & c_1 & c_1(\l_1+\l_3+d_3)\\
+    0    & c_{1} & s_1 & s_1(\l_1+\l_3+d_3)\\
+    -1   & 0      &  0  &  \l_2 + d_2 \\
     0    &     0  & 0   &        1       \\
 \end{bmatrix}
 \]
@@ -181,7 +202,7 @@ J_{P_1} &= z_0 \times (d^0_e  -  d^0_0) = \begin{bmatrix}
     c_1(\l_1 + \l_3 + d_3) \\
 \end{bmatrix} 
 &
-J_{O_1} &= z_0 = \begin{bmatrix}0\\0\\1\end{bmatrix}
+J_{O_1} &= z_0 = \begin{bmatrix}0\\-1\\0\end{bmatrix}
 \\
 J_{P_2} &= z_1 = \begin{bmatrix}
      0 \\
@@ -206,6 +227,16 @@ J(\q) =
     -s_1(\l_1 + \l_3 + d_3) &  0 & c1 \\
      0 &  -1 & 0 \\
      c_1(\l_1 + \l_3 + d_3) & 0 & s1 \\
+    0 & 0 & 0 \\
+    -1 & 0 & 0 \\
+    0 & 0 & 0 \\
+\end{bmatrix}
+\qquad
+J_0(\q) = 
+\begin{bmatrix}
+    -s_1(\l_1 + \l_3 + d_3) &  0 & c1 \\
+    c_1(\l_1 + \l_3 + d_3) & 0 & s1 \\
+     0 &  1 & 0 \\
     0 & 0 & 0 \\
     0 & 0 & 0 \\
     1 & 0 & 0 \\
@@ -234,8 +265,18 @@ Ja(\q) =
     -s_1(\l_1 + \l_3 + d_3) &  0 & c1 \\
      0 &  -1 & 0 \\
      c_1(\l_1 + \l_3 + d_3) & 0 & s1 \\
+    1 & 0 & 0 \\
     0 & 0 & 0 \\
-    -1 & 0 & 0 \\
+    0 & 0 & 0 \\
+\end{bmatrix}
+\qquad
+Ja_0(\q) = 
+\begin{bmatrix}
+    -s_1(\l_1 + \l_3 + d_3) &  0 & c1 \\
+    c_1(\l_1 + \l_3 + d_3) & 0 & s1 \\
+     0 &  1 & 0 \\
+    1 & 0 & 0 \\
+    0 & 0 & 0 \\
     0 & 0 & 0 \\
 \end{bmatrix}
 \]
@@ -284,10 +325,10 @@ The potential energy is calculated according to the formula:
     U_i = -m_{l_i}g_0^{T}p_{l_i}
     \qquad
     g_0 = \begin{bmatrix}
-        0\\ 0 \\ -g
+        0\\ -g \\ 0
     \end{bmatrix}
 \]
-\noindent The total potential energy is the sum of the 3 contributions $U_1$ $U_2$ and $U_3$. The total expression is reported and was calculated using the MATLAB symbolic toolbox ($L_{ih}$ is the length of i-th link and $m_i$ is the mass)
+\noindent The total potential energy is the sum of the 3 contributions $U_1$ $U_2$ and $U_3$. The total expression is reported and was calculated using the MATLAB symbolic toolbox w.r.t of frame 0 ($l_{i}$ is the length of i-th link and $m_i$ is the mass)
 \[
     U = \frac{gsin(\theta_1)(l_{1}m_1 + 2l_{1}m_2 + 2l_{1}m_3 + l_{3}m_3 + 2d_3m_3)}{2}  
 \]
@@ -351,8 +392,8 @@ For the inertia tensors we can use the following formulas for the cylindrical an
     \end{bmatrix}
     \qquad
     J^{\l_2}_{P} = \begin{bmatrix}
-        \l_2cos(\theta_1)/2 - \l_1sin(\theta_1) &0 &0\\
-\l_1cos(\theta_1) + (\l_2sin(\theta_1))/2& 0 &0\\
+        - \l_1sin(\theta_1) &0 &0\\
+\l_1cos(\theta_1) & 0 &0\\
                             0& 1& 0;
     \end{bmatrix}
 \]
@@ -372,7 +413,14 @@ For the inertia tensors we can use the following formulas for the cylindrical an
   B(\textbf{q}) = B_1(\textbf{q}) + B_2(\textbf{q}) +B_3(\textbf{q}) 
 \]
 
-\noindent Finally we can recover the kinetic energy using the calculated $B(\textbf{q})$ and $ \dot{\textbf{q}}$.
+\noindent Finally we can recover the kinetic energy using the calculated $B(\textbf{q})$ and $ \dot{\textbf{q}}$. In order to verify the following properties has been checked: 
+\bigskip
+\begin{itemize}
+    \item $B(\q) = B(\q)^\top$ symmetric
+    \item $B(\q) \succ 0$ positive definite
+    \item $T(\q, \dotq) = 0$ if and only if $ \dotq = 0$
+    \item $T(\q, \dotq) \geq 0$
+\end{itemize}
 
 \subsection{Dynamic Model of the manipulator}
 The aim is to find an expression that describes the dynamic model of the manipulator:
@@ -383,7 +431,7 @@ The aim is to find an expression that describes the dynamic model of the manipul
 \noindent The matrix $B(q)$ was previously calculated as a sum of the contributions of each link and $g(q)$ can be easily derived by differentiating $U$ by the generalized positions $q = [\theta_1,d_2, d_3]$. In order to recover $C(q,\dot{q})$ some additional steps are required and described as follows:
 \begin{equation}
     \begin{aligned}
-        \sum_{j=1}^{n} c_{ij}(q)\dot{q_j}  &= \sum_{j=1}^{n}\sum_{k=1}^{n} \frac{1}{2} (\pdv{b_{ij}}{q_k}+\pdv{b_{ik}}{q_j}-\pdv{b_{jk}}{q_i})\dot{q_k}\dot{q_j} \\
+        \sum_{j=1}^{n} c_{ij}(\q, \dotq)\dot{q_j}  &= \sum_{j=1}^{n}\sum_{k=1}^{n} \frac{1}{2} (\pdv{b_{ij}}{q_k}+\pdv{b_{ik}}{q_j}-\pdv{b_{jk}}{q_i})\dot{q_k}\dot{q_j} \\
          &= \sum_{j=1}^{n}\sum_{k=1}^{n} c_{ijk}\dot{q_k}\dot{q_j} \\
          &= \sum_{j=1}^{n} c_{ij}\dot{q_j}
     \end{aligned}
@@ -395,16 +443,38 @@ The aim is to find an expression that describes the dynamic model of the manipul
 \]
 \subsection{Recursive Newton Euler}
 The recursive newton euler has been implemented for the RPP robot. The calculations are lengthy and are not reported here. The results have been compared with the lagrangian model and using the following facts:
-
+\bigskip
+\[
+    \tau_{d} = NE(q,\dot{q}, \ddot{q}, g_{0})
+\]
+\noindent Gravity term
 \[
     g(q) = NE(q,0,0,g_0)
 \]
+Centrifugal and coriolis term
 \[
     C(q,\dot{q})\dot{q} = NE(q,\dot{q},0,0)
 \]
+Inertial matrix
 \[
     B_i(q) = NE(q,0,e_i,0) \qquad e_i = \text{i-th element equal to 1}
 \]
+Generalized momentum
+\[
+    B(q)\dot{q} = NE(q,0,\dot{q},0)
+\]
+\subsection{Operational space dynamic model}
+The operational space dynamic model is defined using the following relations:
+\[
+    \begin{cases}
+    B_{A}(x) = J_{A}^{-1}BJ_A^{-1} \\
+    C_{A}(x)\dot{x} = J_{A}^{-1}C\dot{q} - B_{A}\dot{J_{A}}\dot{q} \\
+    g_{A}(x) = J_{A}^{-1}g \\
+    u = T_{A}^T(x) h \\
+    u_e = T_{A}^T(x)h_{e}
+    \end{cases}
+\]
+Under the assumptions that $B_{A}$ is nonsingular $J_{A}$ full rank.
 
 \newpage 
 \section{Control architectures}
@@ -472,10 +542,32 @@ Finally I can set a disturbance to the input as a sinuoidal function and see the
     \label{fig:gravity_comp_noise}
 \end{figure}
 
+\begin{theorem}
+A PD controller with gravity compensation
+\[
+    u = g(q_{d}) + K_p(q_d -q) - K_d\dot{q}
+\]
+guarantees that the equilibrium point $(q_d, 0)$ on the system 
+\[
+    B(q)\ddot{q} + C(q,\dot{q}) \dot{q} + F\dot{q} + g(q) = u
+\]
+is globally asymptotically stable
+\end{theorem}
+
+It is important to notice that the control law requires the on-line computation of the term $g(q)$, moreover if the matrices $K_p$ and $K_d$ are chosen diagonal we have n decentralized PD controllers, one for each degree of fredom of the robotic manipulator (A PD controlle is a similar to a software spring-damper system)
+
 \newpage 
 \subsection{Joint Space Inverse Dynamic PD control}
 
-The joint space inverse dynamics PD control architecture was introduced to solve the tracking problem using the 3DOF manipulator. In Fig \ref{fig:inv_dyn} and example of the response obtained using a polynomial trajectory with waypoints in (0,3,5) is reported.
+The joint space inverse dynamics PD control architecture was introduced to solve the tracking problem using the 3DOF manipulator. It consists in a  nonlinear state feedback able to make an exact linearization of the nonlinear system dynamics and a stabilizing linear control. 
+\[
+    \tau = B(q)y + n(q, \dot{q}) \quad \textbf{inverse dynamics control}
+    \qquad
+    y = -K_{p}q - K_{d}\dot{q} + r \quad \textbf{stabilizing linear}
+\]
+where y is the control input of a set of n second order linear and decoupled systems.
+
+In Fig \ref{fig:inv_dyn} and example of the response obtained using a polynomial trajectory with waypoints in (0,3,5) is reported.
 \begin{figure}[H]
     \begin{center}
         \hspace*{-4.5cm}
@@ -511,7 +603,7 @@ In Fig \ref{fig:inv_dyn_no_grav} the gravity was removed from the $n(q,\dot{q})$
         \hspace*{-4.5cm}
         \includegraphics[scale=0.5]{images/inv_dyn_no_grav.eps}
     \end{center}
-    \caption{Inverse dynamic PD control without gravity in $n$ term)}
+    \caption{Inverse dynamic PD control without gravity in $n$ term}
     \label{fig:inv_dyn_no_grav}
 \end{figure}
 
@@ -526,7 +618,7 @@ In Fig \ref{fig:inv_dyn_no_grav} the gravity was removed from the $n(q,\dot{q})$
 \end{itemize}
 
 \newpage
-\subsection{Operational Space PD control with graviy compensation}
+\subsection{Operational Space PD control with gravity compensation}
 
 The result obtained by the PD with gravity compensation in the operational space is reported in Fig \ref{fig:gravity_op}. The robot has 3DOF so it is not possible to force the 3 positions and 3 orientations as we want. To obtained the following results I started from a joint configuration which was translated into the operational space $q = (0.2, 0.2, 0.1)$. The results are provided wrt of frame 0.
 \begin{figure}[H]

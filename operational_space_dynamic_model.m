@@ -12,16 +12,16 @@ Ta = [1 0, 0, 0, 0, 0;
 % Ja_transformed = Ta*J; Ja0_e and Ja
 Ja0_e = simplify(Ja0_e);
 
+% Derive the dot_Ja
 t = sym('t', 'real');
 q_time = [symfun('t1(t)', t), symfun('d2(t)', t), symfun('d3(t)', t)];
 dq_time = diff(q_time);
 ddq_time = diff(dq_time);
 
+
 Ja_time = subs(Ja0_e, q, q_time);
-dJa_time = diff(Ja_time);
-
-
-Ja0_e_d = simplify(subs(diff(Ja_time,t), [dq_time,q_time], [d_q,q]));
+dot_Ja_time = diff(Ja_time, t);
+dot_Ja0_e = simplify(subs(dot_Ja_time, [dq_time,q_time], [d_q,q]));
 
 syms f_e1 real;
 syms f_e2 real;
@@ -34,7 +34,7 @@ he = [f_e1; f_e2; f_e3; mu_e1; mu_e2; mu_e3];
 % Calculate the dynamic model in operational space for the non-redundant
 % manipulator in a nonsigular configuration
 Ba = simplify(pinv(Ja0_e') * B * pinv(Ja0_e));
-Ca_dx = simplify(pinv(Ja0_e') * C * d_q' - Ba * Ja0_e_d * d_q');
+Ca_dx = simplify(pinv(Ja0_e') * C * d_q' - Ba * dot_Ja0_e * d_q');
 ga = simplify(pinv(Ja0_e') * [0; -g; 0]);
 ue = Ta' * he;
 % u = Ta'*h;
