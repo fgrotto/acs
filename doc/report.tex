@@ -33,7 +33,7 @@
 \maketitle
 \tableofcontents
 
-\newpage
+\bigskip
 \section{Homework List}
 \begin{itemize}
     \item HW 1: Direct, inverse, differential kinematics
@@ -43,6 +43,14 @@
     \item HW 5: Compute the dynamic model in the operational space
     \item HW 6: Joint space PD control
     \item HW 7: Joint Space Inverse Dynamics Control
+    \item HW 8: Adaptive Control
+    \item HW 9: Operational Space PD Control
+    \item HW 10: Operational Space Inverse Dynamics Control
+    \item HW 11: Compliance Control
+    \item HW 12: Impendance Control
+    \item HW 13: Admittance Control
+    \item HW 14: Force Control
+    \item HW 15: Parallel Force Control
 \end{itemize}
 
 \newpage
@@ -620,33 +628,45 @@ In Fig \ref{fig:inv_dyn_no_grav} the gravity was removed from the $n(q,\dot{q})$
 \newpage
 \subsection{Operational Space PD control with gravity compensation}
 
-The result obtained by the PD with gravity compensation in the operational space is reported in Fig \ref{fig:gravity_op}. The robot has 3DOF so it is not possible to force the 3 positions and 3 orientations as we want. To obtained the following results I started from a joint configuration which was translated into the operational space $q = (0.2, 0.2, 0.1)$. The results are provided wrt of frame 0.
+The result obtained by the PD with gravity compensation in the operational space is reported in Fig \ref{fig:gravity_op}. The robot has 3DOF so it is not possible to force the 3 positions and 3 orientations as we want. The control law used is:
+\[
+    \tau = g(q) + J_{A}^T(q)K_{p}(x_d -x) - J_{A}^T(q)K_dJ_{A}(q)\dot{q} 
+\]
+To obtain the following results I started from a joint configuration which was translated into the operational space $q = (0.1, -0.1, 0.05)$. The results are provided wrt of frame 0.
 \begin{figure}[H]
     \begin{center}
         \hspace*{-4.5cm}
         \includegraphics[scale=0.5]{images/op_gravity.eps}
     \end{center}
-    \caption{Operational Space PD control with graviy compensation}
+    \caption{Operational Space PD control with gravity compensation}
     \label{fig:gravity_op}
 \end{figure}
 
 \subsubsection{Without gravity}
 
-The desired configuration is $q = (0, 0.2, 0)$ in which the joint 1 and partially joint 3 are responsible for the gravity compensation as it is visible. As it is visible $x$ and $y$ don't compensate anymore (wrt of frame 0).
+The desired configuration is $q = (0, -0.1, 0)$ in which the joint 1 and partially joint 3 are responsible for the gravity compensation as it is visible. As it is visible $x$ and $y$ don't compensate anymore (wrt of frame 0).
 
 \begin{figure}[H]
     \begin{center}
         \hspace*{-4.5cm}
         \includegraphics[scale=0.5]{images/op_without_gravity.eps}
     \end{center}
-    \caption{Operational Space PD control without graviy compensation}
+    \caption{Operational Space PD control without gravity compensation}
     \label{fig:without_gravity_op}
 \end{figure}
 
 \newpage
 \subsection{Operational Space Inverse Dynamic PD control}
 
-The operational space inverse dynamics PD control architecture was introduced to solve the tracking problem using the 3DOF manipulator. In Fig \ref{fig:op_inv_dyn} an example of the response obtained using a polynomial trajectory. The waypoints provided are $ q = [0,2,3;1,3,1;0,1,1] $ at time $t = [ 0, 2, 4 ] $
+The operational space inverse dynamics PD control architecture was introduced to solve the tracking problem using the 3DOF manipulator. The overall control law is:
+\[
+    \tau = B(q)\left(J_{A}^{-1}(q)(\ddot{x_d}+K_D\dot{\tilde{x}}+K_P\tilde{x}-\dot{J_A}(q,\dot{q})\dot{q})\right)+ C(q,\dot{q})\dot{q} + g(q)
+\]
+where
+\[
+    \tilde{x} = x_d - x
+\]
+In Fig \ref{fig:op_inv_dyn} an example of the response obtained using a polynomial trajectory. The waypoints provided are $ q = [0,0,0.1;0,-0.1,0;0,0.1,0] $ at time $t = [ 0, 2, 4 ] $
 \begin{figure}[H]
     \begin{center}
         \hspace*{-4.5cm}
@@ -656,5 +676,246 @@ The operational space inverse dynamics PD control architecture was introduced to
     \label{fig:op_inv_dyn}
 \end{figure}
 
+\newpage
+\subsection{Compliance Control}
+Compliance control is an indirect force control method meaning that the force control is achived via motion control without explicit closure of a force feedback loop. The control used derived is:
+\[
+    \tau = g(q) + J_{Ad}^T(q,\tilde{x})\left( K_P\tilde{x} - K_DJ_{Ad} (q,\tilde{x})\dot{q}\right)
+\]
+where
+\[
+    J_{Ad} = T_A^{-1}(\phi_{d,e})\begin{bmatrix}
+        R_d^T & \emptyset_3 \\ 
+    \emptyset_3 &     R_d^T \\
+    \end{bmatrix} J(q)
+\]
+It is important to notice that $K_P$ is called stiffness matrix since it has the emeaning of an active stiffness, a generalized spring acting between the end-effector frame and the desired frame.
+
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-4.5cm}
+        \includegraphics[scale=0.5]{images/compliance_soft.eps}
+    \end{center}
+    \caption{Compliance with environment $K$ = 5 at 0.6 along x and $K_P$ = 50, $q = (0.1,-0.1,0.1)$}
+    \label{fig:compliance_soft}
+\end{figure}
+
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-4.5cm}
+        \includegraphics[scale=0.5]{images/compliance_stiff.eps}
+    \end{center}
+    \caption{Compliance with environment $K$ = 200 at 0.6 along x and $K_P$ = 50, $q = (0.1,-0.1,0.1)$}
+    \label{fig:compliance_stiff}
+\end{figure}
+
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-0cm}
+        \includegraphics[scale=0.25]{images/compliance_env.eps}
+    \end{center}
+    \caption{Compliance environment along x with $K = 200$ and $K_P = 50$, as it is visible the $he$ component oscillates due to stiff contact but the limit is reached perfectly}
+    \label{fig:comliance_env}
+\end{figure}
+
+\subsection{Impedance Control}
+Impedance control is an indirect force control method meaning that the force control is achived via motion control without explicit closure of a force feedback loop. The control used is:
+\[
+    u = B(q)y + n(q,\dot{q}) + J^T(q)h_e
+\]
+where
+\[
+    y = J_{Ad}^{-1}M_d^{-1}\left( K_D\dot{\tilde{x}} + K_P \tilde{x} - M_d\dot{J_{Ad}}\dot{q} + M_d\dot{b} - h_{d,e} \right)
+\]
+yields the equation
+\[
+    M_d\ddot{\tilde{x}} + K_D\dot{\tilde{x}} + K_P\tilde{x} = h_{d,e}
+\]
+
+In order to get $\dot{b}$ the following equation was considered:
+\[
+    \dot{b} = \begin{bmatrix}
+        R_d^T S(w_d^d)\dot{o_d} + R_d^T\ddot{o_d} + \dot{S}(w_d^d)o_{d,e}^d + S(w_d^d)\dot{o_{d,e}^d}\\ 
+    \dot{T^{-1}}(\phi_{d,e})w_d^d + T^{-1}(\phi_{d,e})\dot{w_d^d} \\
+    \end{bmatrix}
+\]
+
+Moreover,
+\[
+    \frac{d}{dt}\left(S(w_d^d)o_{d,e}^d \right)= R_d^TS(\dot{w_d})(o_d - o_e) + R_d^{T}S(w_d)(\dot{o_d} - \dot{o_e})
+\]
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-4.5cm}
+        \includegraphics[scale=0.5]{images/impendance_soft.eps}
+    \end{center}
+    \caption{Impedance with environment $K$ = 5 at 0.6 along x}
+    \label{fig:impedance_soft}
+\end{figure}
+
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-4.5cm}
+        \includegraphics[scale=0.5]{images/impendance_stiff.eps}
+    \end{center}
+    \caption{Compliance with environment $K$ = 200 at 0.6 along x}
+    \label{fig:impedance_stiff}
+\end{figure}
+
+\newpage
+\subsection{Admittance Control}
+Admittance control is an indirect force control method meaning that the force control is achived via motion control without explicit closure of a force feedback loop. The gains of the motion control law can be tuned to guarantee a high value of disturbance rejection factor. The gains of the impedance control law:
+\[
+    M_t\ddot{\tilde{z}} + K_{Dt}\dot{\tilde{z}} + K_{Pt}\tilde{z} = h_e^d \qquad \tilde{z} = x_d - x_t
+\]
+can be sent to guarantee satisfactory behaviour during the interaction with the environment. Admittance control should be used anytime there is an embedded position or velocity control loop provided by the robot company that cannot be by-passed (inner loop faster than outer loop)
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-4.5cm}
+        \includegraphics[scale=0.5]{images/admittance_soft.eps}
+    \end{center}
+    \caption{Admittance control with environment $K$ = 10 at 0.6 along x 
+    where $M_t$ = diag([1 1 1 1 1 1]) $K_{Pt}$ = diag([0.1 1 1.3 1 1 1]) $K_{Dt}$ = diag([50 1 2 1 1 1])}
+    \label{fig:admittance_soft}
+\end{figure}
+
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-4.5cm}
+        \includegraphics[scale=0.5]{images/admittance_stiff.eps}
+    \end{center}
+    \caption{Admittance control with environment $K$ = 200 at 0.6 along x where $M_t$ = diag([1 1 1 1 1 1]) $K_{Pt}$ = diag([0.1 1 1.3 1 1 1]) $K_{Dt}$ = diag([50 1 2 1 1 1])}
+    \label{fig:admittance_stiff}
+\end{figure}
+
+\newpage
+\subsection{Force Control (with inner position loop)}
+It is a direct force control meaning that the interaction force $h_e$ can be directly controlled by specifying the desired force in a force feedback loop. The important control law in this case is:
+\[
+    y = J^{-1}(q)M_d^{-1}\left(-K_D\dot{x_e} + K_P(x_F-x_e) - M_d\dot{J}(q,\dot{q})\dot{q}\right)
+\]
+ends up with a set of linear second order differential equations:
+\[
+    M_d\ddot{x_e} + K_D\dot{x_e} + K_Px_e = K_Px_F
+\]
+where we are mapping the reference $x_F$ into the actual position $x_e$. Then we can define a PI controller $C_F$ (compliance matrix) to reach the desired force with zero steady state error:
+\[
+    x_F = C_F(f_d - f_e)
+\]
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-4.5cm}
+        \includegraphics[scale=0.5]{images/force_p.eps}
+    \end{center}
+    \caption{Force control with P $K_p$ = 10. The enviroment is on x at 0.6 with stiffness $2$. As it is visible the reference force on x of $0.07$ is not reached since we don't have an integrative part, however we can increase the gain to improve the performances}
+    \label{fig:force_p}
+\end{figure}
+
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-4.5cm}
+        \includegraphics[scale=0.5]{images/force_control_pi.eps}
+    \end{center}
+    \caption{Force control with PI $K_p$ = 10 $K_i$ = 15. The enviroment is on x at 0.6 with stiffness $2$. As it is visible the reference force on x of $0.07$ is reached with 0 steady state error}
+    \label{fig:force_pi}
+\end{figure}
+
+\newpage
+\subsection{Parallel Force/Position Control}
+The parallel force/position control is a control scheme where both the desired reference force $f_d$ and the desired reference position $x_d$ are provided. The control $y$ is now:
+\[
+    y = J^{-1}(q)M_d^{-1}\left(-K_D\dot{x_e} + K_P(x_F+\tilde{x}) - M_d\dot{J}(q,\dot{q})\dot{q}\right)
+\]
+where 
+\[
+    \tilde{x} = x_d - x_e
+\]
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-4.5cm}
+        \includegraphics[scale=0.5]{images/parallel_p.eps}
+    \end{center}
+    \caption{Parallel force control with P $K_p$ = 4. The enviroment is on x at 0.6 with stiffness $5$. As it is visible the reference force on x of $0.1$ is not reached since we don't have an integrative part, however we can increase the gain to improve the performances, moreover the reference $x_d$ is not reached due to tradeoff between force-positions}
+    \label{fig:parallel_p}
+\end{figure}
+
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-4.5cm}
+        \includegraphics[scale=0.5]{images/parallel_pi.eps}
+    \end{center}
+    \caption{Parallel Force control with PI $K_p$ = 4 $K_i$ = 2. The enviroment is on x at 0.6 with stiffness $5$. As it is visible the reference force on x of $0.1$ is reached with 0 steady state error however the reference position is not reached since we are in contrained motion due to the environment }
+    \label{fig:parallel_pi}
+\end{figure}
+
+It is important to notice two facts:
+\begin{itemize}
+    \item Along directions outside Image(K) we have unconstrained motion, $x_d$ is reached by $x_e$
+    \item Along directions beloging to Image(K) we have contrained motions, $x_d$ acts like an additional disturbance $x_e \neq x_d$
+\end{itemize}
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-4.5cm}
+        \includegraphics[scale=0.5]{images/parallel_constrained.eps}
+    \end{center}
+    \caption{Parallel Force control with PI $K_p$ = 4 $K_i$ = 2. The enviroment is on x at 0.6 with stiffness $5$. As it is visible the reference force on x of $0.1$ is reached with 0 steady state error however the reference position on y is reached since we are in unconstrained motion }
+    \label{fig:parallel_constrained}
+\end{figure}
+\newpage
+\subsection{Adaptive Control}
+Adaptive control is based on online adaptation of the computational model to the dynamic model in order to deal with model uncertainty. The types of uncertanties are the dynamic parameters (masses, inertia and so on), friction coefficients, payloadat the end-effector in pick-and-place tasks. The dynamic model can be written using:
+\[
+    B(q)\ddot{q} + C(q,\dot{q})\dot{q} + F\dot{q} + g(q) = Y(q,\dot{q},\ddot{q})\theta
+\]
+where $\theta$ is a n p vector of constant parameters and $Y$ is an (n $x$ np) matrix. The control law is:
+
+\[
+    \begin{cases}
+        \tau = \hat{B}(q)\ddot{q_r} + \hat{C}(q,\dot{q})\dot{q_r} + \hat{F}\dot{q_r} + \hat{g}(q) + K_D\sigma \\
+        \dot{\hat{\theta}} = \gamma Y^T(q,\dot{q},\dot{q_r}, \ddot{q_r})\sigma
+        \end{cases}
+\]
+where 
+\[
+        \sigma = \dot{q_r} - \dot{q} \qquad \gamma = K_{\theta}^{-1} \succ 0
+\]
+
+The model considered is a 1DOF link under gravity with the following model:
+\[
+        I\ddot{q} + F\dot{q} + mgd sin(q) = \tau
+\]
+
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-4.5cm}
+        \includegraphics[scale=0.5]{images/adaptive_traj.eps}
+    \end{center}
+    \caption{Adaptive Control with a trajectory reference}
+    \label{fig:adaptive_trajectory}
+\end{figure}
+
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-4.5cm}
+        \includegraphics[scale=0.5]{images/adaptive_square.eps}
+    \end{center}
+    \caption{Adaptive control with a square signal on accelerations}
+    \label{fig:adaptive_square}
+\end{figure}
+
+In our case the parameters are $I = 0.1$ $F = 0.2$ and $G = 1.96$. The parameter lambda was set to $\lambda = 40 $
+\begin{figure}[H]
+    \begin{center}
+        \hspace*{-4.5cm}
+        \includegraphics[scale=0.5]{images/adaptive_sin.eps}
+    \end{center}
+    \caption{Adaptive Control with a sinusoidal reference}
+    \label{fig:adaptive_sinusoidal}
+\end{figure}
+
+\section {References}
+\begin{itemize}
+    \item Bruno Siciliano, Lorenzo Sciavicco, Luigi Villani, Giuseppe Oriolo \textbf{Robotics: Modelling, Planning and Control}
+\end{itemize}
 
 \end{document}

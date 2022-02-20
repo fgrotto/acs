@@ -22,6 +22,11 @@ param.Fsv = 0;
 Kp = diag([600 380 250]);
 Kd = diag([200 40 15]);
 
+% Check that it is a second order system
+% wn = 2;
+% xi = 1;
+% Kp = diag([wn^2 wn^2 wn^2]);
+% Kd = diag([2*xi*wn 2*xi*wn 2*xi*wn]);
 
 
 

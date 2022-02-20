@@ -31,7 +31,7 @@ xd = Kinematics([t1,d2,d3], param);
 Kp = diag([50 80 100 1 1 1]);
 Kd = diag([2 10 30 1 1 1]);
 
-K = 5*diag([1 1 1 1 1 1]);
+K = 200*diag([1 1 1 1 1 1]);
 param.Kp = Kp;
 param.K = K;
 

@@ -4,7 +4,7 @@ hold on;
 grid on;
 plot(out.x.Time, out.x.data(:,1),'LineWidth', 1.2);
 hold on; plot(out.xd.Time, out.xd.data(:,1),'LineWidth', 1.2);
-%yline(out.xd.data(1,1),'-','');
+yline(0.6,'-','environment');
 xlabel('time [s]');
 ylabel('x');
 legend('x', 'xd');

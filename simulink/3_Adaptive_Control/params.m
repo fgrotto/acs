@@ -7,12 +7,12 @@ param.I = 0.1;
 param.F = 0.2;
 param.G = m*9.81*0.2; % mgd
 
-K = diag([0.3]);
-lambda = 30;
+K = diag([1.2]);
+lambda = 40;
 
 % PD Controller parameters
-Kp = diag([1]);
-Kd = diag([0.2]);
+Kp = diag([25]);
+Kd = diag([10]);
 
 
 

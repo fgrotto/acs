@@ -1,51 +1,22 @@
 figure();
-subplot(2,3,1);
+subplot(1,2,1);
 hold on;
 grid on;
-plot(out.q.data(:,1),'LineWidth', 1.2);
-yline(out.qd.data(:,1),'-','');
+plot(out.q.Time, out.q.data(:,1),'LineWidth', 1.2);
+hold on, plot(out.q.Time, out.qd.data(:,1),'LineWidth', 1.2);
 xlabel('time [s]');
 ylabel('q [rad/s]');
-legend('q1', 'qd1');
+legend('q', 'qd');
 
-subplot(2,3,2);
+subplot(1,2,2);
 hold on;
 grid on;
-plot(out.q.data(:,2),'LineWidth', 1.2);
-yline(out.qd.data(:,2),'-','');
+plot(out.q.Time, out.param.data(:,1),'LineWidth', 1.2);
+hold on, plot(out.q.Time,out.param.data(:,2),'LineWidth', 1.2);
+hold on; plot(out.q.Time,out.param.data(:,3),'LineWidth', 1.2);
+yline(0.1,'-','I');
+yline(1.9620,'-','G');
+yline(0.2,'-','F');
 xlabel('time [s]');
-ylabel('q [rad/s]');
-legend('q2', 'qd2');
-
-subplot(2,3,3);
-hold on;
-grid on;
-plot(out.q.data(:,3),'LineWidth', 1.2);
-yline(out.qd.data(:,3),'-','');
-xlabel('time [s]');
-ylabel('q [rad/s]');
-legend('q3', 'qd3');
-
-subplot(2,3,4);
-hold on;
-grid on;
-plot(out.tau.data(:,1),'LineWidth', 1.2);
-xlabel('time [s]');
-ylabel('tau [Nm]');
-legend('tau1');
-
-subplot(2,3,5);
-hold on;
-grid on;
-plot(out.tau.data(:,2),'LineWidth', 1.2);
-xlabel('time [s]');
-ylabel('tau [Nm]');
-legend('tau2');
-
-subplot(2,3,6);
-hold on;
-grid on;
-plot(out.tau.data(:,3),'LineWidth', 1.2);
-xlabel('time [s]');
-ylabel('tau [Nm]');
-legend('tau3');
+ylabel('parameters');
+legend('I\_hat', 'F\_hat', 'G\_hat');
