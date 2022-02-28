@@ -1,15 +1,15 @@
 %% Evaluate some results (B, U, T) and dynamic model of the manipulator (Lagrangian formulation)
 
 % You can choose the values for positions, velocites and accelerations
-t1 = 0.1;
-d2 = 0.2;
-d3 = 0.3;
-d_t1 = 0.1;
-d_d2 = 0.1;
-d_d3 = 0.3;
-dd_t1 = 0.1;
-dd_d2 = 0.1;
-dd_d3 = 0.2;
+t1 = 0; %0.1;
+d2 = 0; %0.2;
+d3 = 0; %0.3;
+d_t1 = 0; %0.1;
+d_d2 = 0; %0.1;
+d_d3 = 0; %0.3;
+dd_t1 = 0; %0.1;
+dd_d2 = 0; %0.1;
+dd_d3 = 0; %0.2;
 
 % Gravity
 g = 9.81;
@@ -63,8 +63,10 @@ phi_dd = 0;
 theta_dd = 0;
 psi_dd = 0;
 
+ya = eval(Ba*dd_x+Ca_dx+ga);
+ya_expected = eval((inv(B)*Ja0_e'*Ba)'*tau);
+eq = ya == ya_expected;
+
 % u_operational = Ta'*h;
-u_operational = simplify(Ba*dd_x+Ca_dx+ga + ue);
-eval(u_operational)
-% evaluate actual tau
-eval(J0_e_sym' * Ta*eval(u_operational))
+% u_operational = simplify(Ba*dd_x+Ca_dx+ga + ue);
+% eval(u_operational)

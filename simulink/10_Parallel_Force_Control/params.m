@@ -32,18 +32,18 @@ Fd = [0.1 0 0 0 0 0];
 
 t1 = 0.1;
 d2 = 0;
-d3 = 0.1;
+d3 = 0;
 xd = Kinematics([t1 d2 d3], param);
 
 % Impedance
 % PD Controller parameters
 Kp = diag([500 800 500 1 1 1]);
-Kd = diag([30 120 50 1 1 1]);
+Kd = diag([80 120 50 1 1 1]);
 Md = diag([0.1 1 1 1 1 1]);
 inv_Md = inv(Md);
 
 % Compliance
-Kf = diag([2 1 1.4 1 1 1]);
-Ki = diag([4 1 1.4 1 1 1]);
+Kf = diag([8 1 1.4 1 1 1]);
+Ki = diag([2 1 1.4 1 1 1]);
 
 

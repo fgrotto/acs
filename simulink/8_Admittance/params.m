@@ -38,5 +38,5 @@ param.axis = 1; % 1-x 2-y 3-z wrt of frame 0
 
 % Admittance Controller
 Mt = diag([1 1 1 1 1 1]);
-KPt = diag([0.1 1 1.3 1 1 1]);
-KDt = diag([50 1 2 1 1 1]);
+KPt = diag([10 1 1.3 1 1 1]);
+KDt = diag([2 1 2 1 1 1]);

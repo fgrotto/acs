@@ -210,7 +210,7 @@ J_{P_1} &= z_0 \times (d^0_e  -  d^0_0) = \begin{bmatrix}
     c_1(\l_1 + \l_3 + d_3) \\
 \end{bmatrix} 
 &
-J_{O_1} &= z_0 = \begin{bmatrix}0\\-1\\0\end{bmatrix}
+J_{O_1} &= z_0 = \begin{bmatrix}0\\0\\1\end{bmatrix}
 \\
 J_{P_2} &= z_1 = \begin{bmatrix}
      0 \\
@@ -236,8 +236,8 @@ J(\q) =
      0 &  -1 & 0 \\
      c_1(\l_1 + \l_3 + d_3) & 0 & s1 \\
     0 & 0 & 0 \\
-    -1 & 0 & 0 \\
     0 & 0 & 0 \\
+    1 & 0 & 0 \\
 \end{bmatrix}
 \qquad
 J_0(\q) = 
@@ -475,9 +475,9 @@ Generalized momentum
 The operational space dynamic model is defined using the following relations:
 \[
     \begin{cases}
-    B_{A}(x) = J_{A}^{-1}BJ_A^{-1} \\
-    C_{A}(x)\dot{x} = J_{A}^{-1}C\dot{q} - B_{A}\dot{J_{A}}\dot{q} \\
-    g_{A}(x) = J_{A}^{-1}g \\
+    B_{A}(x) = J_{A}^{-T}BJ_A^{-1} \\
+    C_{A}(x)\dot{x} = J_{A}^{-T}C\dot{q} - B_{A}\dot{J_{A}}\dot{q} \\
+    g_{A}(x) = J_{A}^{-T}g \\
     u = T_{A}^T(x) h \\
     u_e = T_{A}^T(x)h_{e}
     \end{cases}
@@ -774,8 +774,8 @@ can be sent to guarantee satisfactory behaviour during the interaction with the 
         \hspace*{-4.5cm}
         \includegraphics[scale=0.5]{images/admittance_soft.eps}
     \end{center}
-    \caption{Admittance control with environment $K$ = 10 at 0.6 along x 
-    where $M_t$ = diag([1 1 1 1 1 1]) $K_{Pt}$ = diag([0.1 1 1.3 1 1 1]) $K_{Dt}$ = diag([50 1 2 1 1 1])}
+    \caption{Admittance control with environment $K$ = 5 at 0.6 along x 
+    where $M_t$ = diag([1 1 1 1 1 1]) $K_{Pt}$ = diag([10 1 1.3 1 1 1]) $K_{Dt}$ = diag([2 1 2 1 1 1])}
     \label{fig:admittance_soft}
 \end{figure}
 
@@ -784,7 +784,7 @@ can be sent to guarantee satisfactory behaviour during the interaction with the 
         \hspace*{-4.5cm}
         \includegraphics[scale=0.5]{images/admittance_stiff.eps}
     \end{center}
-    \caption{Admittance control with environment $K$ = 200 at 0.6 along x where $M_t$ = diag([1 1 1 1 1 1]) $K_{Pt}$ = diag([0.1 1 1.3 1 1 1]) $K_{Dt}$ = diag([50 1 2 1 1 1])}
+    \caption{Admittance control with environment $K$ = 200 at 0.6 along x where $M_t$ = diag([1 1 1 1 1 1]) $K_{Pt}$ = diag([10 1 1.3 1 1 1]) $K_{Dt}$ = diag([2 1 2 1 1 1])}
     \label{fig:admittance_stiff}
 \end{figure}
 
@@ -863,7 +863,7 @@ It is important to notice two facts:
 \end{figure}
 \newpage
 \subsection{Adaptive Control}
-Adaptive control is based on online adaptation of the computational model to the dynamic model in order to deal with model uncertainty. The types of uncertanties are the dynamic parameters (masses, inertia and so on), friction coefficients, payloadat the end-effector in pick-and-place tasks. The dynamic model can be written using:
+Adaptive control is based on online adaptation of the computational model to the dynamic model in order to deal with model uncertainty. The types of uncertanties are the dynamic parameters (masses, inertia and so on), friction coefficients, payload at the end-effector in pick-and-place tasks. The dynamic model can be written using:
 \[
     B(q)\ddot{q} + C(q,\dot{q})\dot{q} + F\dot{q} + g(q) = Y(q,\dot{q},\ddot{q})\theta
 \]
@@ -871,7 +871,7 @@ where $\theta$ is a n p vector of constant parameters and $Y$ is an (n $x$ np) m
 
 \[
     \begin{cases}
-        \tau = \hat{B}(q)\ddot{q_r} + \hat{C}(q,\dot{q})\dot{q_r} + \hat{F}\dot{q_r} + \hat{g}(q) + K_D\sigma \\
+        \tau = \hat{B}(q)\ddot{q_r} + \hat{C}(q,\dot{q})\dot{q_r} + \hat{F}\dot{q_r} + \hat{g}(q) + K_D\sigma  = Y(q,\dot{q},\dot{q_r}, \ddot{q_r})\hat{\theta} + K_D\sigma\\
         \dot{\hat{\theta}} = \gamma Y^T(q,\dot{q},\dot{q_r}, \ddot{q_r})\sigma
         \end{cases}
 \]

@@ -1,5 +1,5 @@
 figure();
-subplot(1,2,1);
+subplot(1,3,1);
 hold on;
 grid on;
 plot(out.q.Time, out.q.data(:,1),'LineWidth', 1.2);
@@ -8,7 +8,16 @@ xlabel('time [s]');
 ylabel('q [rad/s]');
 legend('q', 'qd');
 
-subplot(1,2,2);
+subplot(1,3,2);
+hold on;
+grid on;
+plot(out.dq.Time, out.dq.data(:,1),'LineWidth', 1.2);
+hold on, plot(out.dq.Time, out.dqd.data(:,1),'LineWidth', 1.2);
+xlabel('time [s]');
+ylabel('dq [rad/s^2]');
+legend('dq', 'd\_qd');
+
+subplot(1,3,3);
 hold on;
 grid on;
 plot(out.q.Time, out.param.data(:,1),'LineWidth', 1.2);
