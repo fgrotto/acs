@@ -4,14 +4,15 @@
 % which uses the symbolic toolbox for evaluation
 %
 % Analytical Jacobian manually calculated (from base to ee)
+P0 = [0; 0; 0];
 Ja = [-sin(t1)*(d3+l3+l1)    0   cos(t1);
         0                   -1   0;
      cos(t1)*(l1+d3+l3)      0   sin(t1);
-        1                    0   0;
         0                    0   0;
+        -1                    0   0;
         0                    0   0;];
 JaLinearVel =   jacobian(Pb_e, [t1;d2;d3]);
-JaOrientation = [1 0 0; 0 0 0; 0 0 0];
+JaOrientation = [0 -1 0; 0 0 0; 0 0 0];
 Ja_sym = [JaLinearVel; JaOrientation];
 
 
@@ -28,7 +29,7 @@ tmp2 = (Hb_0*H0_1*H1_2);
 JP1 = cross(Hb_0(1:3,3), Pb_e-Hb_0(1:3,4));
 JP2 = tmp1(1:3,3); 
 JP3 = tmp2(1:3,3); 
-J01 = [0; 0; 1];
+J01 = Hb_0(1:3,3);
 J02 = [0; 0; 0;];
 J03 = [0; 0; 0;];
 
@@ -38,7 +39,7 @@ J0 = [J01 J02 J03];
 % Put together the upper and the lower part to obtain the full geometric
 % jacobian from the base frame to the end effector
 J = [JP; J0];
-geometricJacobian = geometricJacobian(robot, config, 'ee');
+% geometricJacobian = geometricJacobian(robot, config, 'ee');
 
 %% Jacobians wrt of the frame 0
 % Let's calculate the geometric jacobian wrt of the 0 frame
@@ -55,7 +56,7 @@ tmp1 = (H0_1);
 tmp2 = (H0_1*H1_2);
 tmp3 = (H0_1*H1_2*H2_3);
 P0_e = tmp3(1:3,4);
-JP1 = cross(H0_1(1:3,3), P0_e);
+JP1 = cross(H0_1(1:3,3), P0_e-P0);
 JP2 = tmp1(1:3,3); 
 JP3 = tmp2(1:3,3); 
 J01 = H0_1(1:3,3);

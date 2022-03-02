@@ -204,13 +204,13 @@ The geometric jacobian is defined as follow with $\q = [\t_1,   d_2,   d_3]^\top
 \end{bmatrix}
 \]
 \begin{align*}
-J_{P_1} &= z_0 \times (d^0_e  -  d^0_0) = \begin{bmatrix}
+J_{P_1} &= z_0 \times (p^0_e  -  p_0) = \begin{bmatrix}
     -s_1(\l_1 + \l_3 + d_3) \\
     0 \\
     c_1(\l_1 + \l_3 + d_3) \\
 \end{bmatrix} 
 &
-J_{O_1} &= z_0 = \begin{bmatrix}0\\0\\1\end{bmatrix}
+J_{O_1} &= \begin{bmatrix}0\\-1\\0\end{bmatrix}
 \\
 J_{P_2} &= z_1 = \begin{bmatrix}
      0 \\
@@ -230,14 +230,14 @@ J_{O_3} &= \begin{bmatrix}0\\0\\0\end{bmatrix}
 \end{align*}
 We can finally put all the pieces together and obtain the final geometric jacobian:
 \[
-J(\q) = 
+J_b(\q) = 
 \begin{bmatrix}
     -s_1(\l_1 + \l_3 + d_3) &  0 & c1 \\
      0 &  -1 & 0 \\
      c_1(\l_1 + \l_3 + d_3) & 0 & s1 \\
     0 & 0 & 0 \\
+    -1 & 0 & 0 \\
     0 & 0 & 0 \\
-    1 & 0 & 0 \\
 \end{bmatrix}
 \qquad
 J_0(\q) = 
@@ -268,13 +268,13 @@ p^b_e = \begin{bmatrix}
 
 \noindent Finally we end up with the analytical jacobian
 \[
-Ja(\q) = 
+Ja_b(\q) = 
 \begin{bmatrix}
     -s_1(\l_1 + \l_3 + d_3) &  0 & c1 \\
      0 &  -1 & 0 \\
      c_1(\l_1 + \l_3 + d_3) & 0 & s1 \\
-    1 & 0 & 0 \\
     0 & 0 & 0 \\
+    -1 & 0 & 0 \\
     0 & 0 & 0 \\
 \end{bmatrix}
 \qquad
@@ -488,7 +488,7 @@ Under the assumptions that $B_{A}$ is nonsingular $J_{A}$ full rank.
 \section{Control architectures}
 \subsection{Joint Space PD Control with Gravity Compensation}
 
-The joint space PD Control with gravity compensation was implemented using an S-function to define the manipulator dynamics. In fact the symbolic B,C and G matrixes were used in this context. The values for $Kp$ and $Kd$ has been properly selected for our robot. In Fig \ref{fig:gravity_comp} a plot of the positions with respect of the desired positions are reported as well as the related $tau$ applied to each of the three joints.
+The joint space PD Control with gravity compensation was implemented using an S-function to define the manipulator dynamics. In fact the symbolic B,C and G matrices were used in this context. The values for $Kp$ and $Kd$ have been properly selected for our robot. In Fig \ref{fig:gravity_comp} a plot of the positions with respect of the desired positions are reported as well as the related $tau$ applied to each of the three joints.
 \begin{figure}[H]
     \begin{center}
         \hspace*{-4.5cm}
@@ -502,7 +502,7 @@ It is reasonable to tune the 3 joints to get the same time for tracking or at le
 
 \newpage
 \subsubsection{Without gravity compensation}
-Let's try without the gravity compensation, in Fig \ref{fig:gravity_comp_no_gravity} it's visible that we have an offset in steady-state where the gravity plays a role, in the RPP robot it's the first joint, which is clearly visible, and on the third joint depending on the configuration (in this case the effect is really limited to to the configuration).
+Let's try without the gravity compensation, in Fig \ref{fig:gravity_comp_no_gravity} it's visible that we have an offset in steady-state where the gravity plays a role, in the RPP robot it's the first joint, which is clearly visible, and on the third joint depending on the configuration (in this case the effect is really limited to the configuration).
 \begin{figure}[H]
     \begin{center}
         \hspace*{-4.5cm}
@@ -526,7 +526,7 @@ Finally let's compare the result obtained with gravity with fixed or time-varyin
 
 \subsubsection{For the tracking problem}
 
-This control architecture can also be used, with acceptable results, for the tracking error if we don't need perfect results. The step response was achived with zero steady-state error thanks to the internal model principle (an integrator is embedded into the system thanks to the gravity compensation). This is not true, for example, for a sinusoidal function and the response is always late with respect of the reference signal. This behaviour is reported in Fig \ref{fig:gravity_comp_tracking}.
+This control architecture can also be used, with acceptable results, for the tracking problem if we don't need perfect results. The step response was achieved with zero steady-state error thanks to the internal model principle (an integrator is embedded into the system thanks to the gravity compensation). This is not true, for example, for a sinusoidal function and the response is always late with respect of the reference signal. This behaviour is reported in Fig \ref{fig:gravity_comp_tracking}.
 
 \begin{figure}[H]
     \begin{center}
@@ -562,7 +562,7 @@ guarantees that the equilibrium point $(q_d, 0)$ on the system
 is globally asymptotically stable
 \end{theorem}
 
-It is important to notice that the control law requires the on-line computation of the term $g(q)$, moreover if the matrices $K_p$ and $K_d$ are chosen diagonal we have n decentralized PD controllers, one for each degree of fredom of the robotic manipulator (A PD controlle is a similar to a software spring-damper system)
+It is important to notice that the control law requires the on-line computation of the term $g(q)$, moreover if the matrices $K_p$ and $K_d$ are chosen diagonal we have n decentralized PD controllers, one for each degree of fredom of the robotic manipulator (A PD controller is a similar to a software spring-damper system)
 
 \newpage 
 \subsection{Joint Space Inverse Dynamic PD control}
@@ -628,7 +628,7 @@ In Fig \ref{fig:inv_dyn_no_grav} the gravity was removed from the $n(q,\dot{q})$
 \newpage
 \subsection{Operational Space PD control with gravity compensation}
 
-The result obtained by the PD with gravity compensation in the operational space is reported in Fig \ref{fig:gravity_op}. The robot has 3DOF so it is not possible to force the 3 positions and 3 orientations as we want. The control law used is:
+The results obtained with the PD with gravity compensation in the operational space are reported in Fig \ref{fig:gravity_op}. The robot has 3DOF so it is not possible to force the 3 positions and 3 orientations as we want. The control law used is:
 \[
     \tau = g(q) + J_{A}^T(q)K_{p}(x_d -x) - J_{A}^T(q)K_dJ_{A}(q)\dot{q} 
 \]
@@ -644,7 +644,7 @@ To obtain the following results I started from a joint configuration which was t
 
 \subsubsection{Without gravity}
 
-The desired configuration is $q = (0, -0.1, 0)$ in which the joint 1 and partially joint 3 are responsible for the gravity compensation as it is visible. As it is visible $x$ and $y$ don't compensate anymore (wrt of frame 0).
+In the desired configuration the joint 1 and partially joint 3 are responsible for the gravity compensation as it is visible. As it is visible $x$ and $y$ don't compensate anymore (wrt of frame 0).
 
 \begin{figure}[H]
     \begin{center}
@@ -689,7 +689,7 @@ where
     \emptyset_3 &     R_d^T \\
     \end{bmatrix} J(q)
 \]
-It is important to notice that $K_P$ is called stiffness matrix since it has the emeaning of an active stiffness, a generalized spring acting between the end-effector frame and the desired frame.
+It is important to notice that $K_P$ is called stiffness matrix since it has the meaning of an active stiffness, a generalized spring acting between the end-effector frame and the desired frame.
 
 \begin{figure}[H]
     \begin{center}
@@ -824,7 +824,7 @@ where we are mapping the reference $x_F$ into the actual position $x_e$. Then we
 \subsection{Parallel Force/Position Control}
 The parallel force/position control is a control scheme where both the desired reference force $f_d$ and the desired reference position $x_d$ are provided. The control $y$ is now:
 \[
-    y = J^{-1}(q)M_d^{-1}\left(-K_D\dot{x_e} + K_P(x_F+\tilde{x}) - M_d\dot{J}(q,\dot{q})\dot{q}\right)
+    y = J^{-1}(q)M_d^{-1}\left(-K_D\dot{x_e} + K_P(x_F+\tilde{x}) - M_d\dot{J_A}(q,\dot{q})\dot{q}\right)
 \]
 where 
 \[
