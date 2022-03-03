@@ -206,24 +206,24 @@ The geometric jacobian is defined as follow with $\q = [\t_1,   d_2,   d_3]^\top
 \begin{align*}
 J_{P_1} &= z_0 \times (p^0_e  -  p_0) = \begin{bmatrix}
     -s_1(\l_1 + \l_3 + d_3) \\
+    c_1(\l_1 + \l_3 + d_3)  \\
     0 \\
-    c_1(\l_1 + \l_3 + d_3) \\
 \end{bmatrix} 
 &
-J_{O_1} &= \begin{bmatrix}0\\-1\\0\end{bmatrix}
+J_{O_1} &= \begin{bmatrix}0\\0\\1\end{bmatrix}
 \\
 J_{P_2} &= z_1 = \begin{bmatrix}
      0 \\
-     -1 \\
      0 \\
+     1 \\
 \end{bmatrix} 
 &
 J_{O_2} &= \begin{bmatrix}0\\0\\0\end{bmatrix}
 \\
 J_{P_3} &= z_2 = \begin{bmatrix}
     c_1\\
-    0\\
-    s_1
+    s_1\\
+    0
 \end{bmatrix}
 &
 J_{O_3} &= \begin{bmatrix}0\\0\\0\end{bmatrix}
@@ -252,32 +252,21 @@ J_0(\q) =
 \]
 
 \subsection{Analytical Jacobian}
-The analytical jacobian can be easily calculated by using partial derivatives of $p^b_e$
+The analytical jacobian can be easily calculated by using partial derivatives of $p^0_e$
 \[
-p^b_e = \begin{bmatrix}
+p^0_e = \begin{bmatrix}
     x \\ y \\ z \\
 \end{bmatrix}
 =
 \begin{bmatrix}
     c_1(\l_1+\l_3+d_3)\\
-     -\l_2 - d_2 \\
-    s_1(\l_1+\l_3+d_3) + \l_0 \\
-    1        \\
+    s_1(\l_1+\l_3+d_3)\\
+    \l_2 + d_2 \\
 \end{bmatrix}
 \]
 
 \noindent Finally we end up with the analytical jacobian
 \[
-Ja_b(\q) = 
-\begin{bmatrix}
-    -s_1(\l_1 + \l_3 + d_3) &  0 & c1 \\
-     0 &  -1 & 0 \\
-     c_1(\l_1 + \l_3 + d_3) & 0 & s1 \\
-    0 & 0 & 0 \\
-    -1 & 0 & 0 \\
-    0 & 0 & 0 \\
-\end{bmatrix}
-\qquad
 Ja_0(\q) = 
 \begin{bmatrix}
     -s_1(\l_1 + \l_3 + d_3) &  0 & c1 \\
