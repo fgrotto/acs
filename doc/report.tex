@@ -831,9 +831,9 @@ where
 \begin{figure}[H]
     \begin{center}
         \hspace*{-4.5cm}
-        \includegraphics[scale=0.5]{images/parallel_pi.eps}
+        \includegraphics[scale=0.5]{images/parallel_constrained.eps}
     \end{center}
-    \caption{Parallel Force control with PI $K_p$ = 4 $K_i$ = 2. The enviroment is on x at 0.6 with stiffness $5$. As it is visible the reference force on x of $0.1$ is reached with 0 steady state error however the reference position is not reached since we are in contrained motion due to the environment }
+    \caption{Parallel Force control with PI $K_p$ = 4 $K_i$ = 2. The enviroment is on x at 0.6 with stiffness $5$. As it is visible the reference force on x of $0.1$ is reached with 0 steady state error however the reference position on x is not reached since we are in contrained motion due to the environment }
     \label{fig:parallel_pi}
 \end{figure}
 
@@ -845,9 +845,9 @@ It is important to notice two facts:
 \begin{figure}[H]
     \begin{center}
         \hspace*{-4.5cm}
-        \includegraphics[scale=0.5]{images/parallel_constrained.eps}
+        \includegraphics[scale=0.5]{images/parallel_pi_complete.eps}
     \end{center}
-    \caption{Parallel Force control with PI $K_p$ = 4 $K_i$ = 2. The enviroment is on x at 0.6 with stiffness $5$. As it is visible the reference force on x of $0.1$ is reached with 0 steady state error however the reference position on y is reached since we are in unconstrained motion }
+    \caption{Parallel Force control with PI $K_p$ = 8 $K_i$ = 4. The enviroment is on x at 0.6 with stiffness $5$. As it is visible the reference force on x of $0.1$ is reached with 0 steady state error however the reference positions on y and z are reached since we are in unconstrained motion }
     \label{fig:parallel_constrained}
 \end{figure}
 \newpage

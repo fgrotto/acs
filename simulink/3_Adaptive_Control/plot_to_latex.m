@@ -5,7 +5,7 @@ grid on;
 plot(out.q.Time, out.q.data(:,1),'LineWidth', 1.2);
 hold on, plot(out.q.Time, out.qd.data(:,1),'LineWidth', 1.2);
 xlabel('time [s]');
-ylabel('q [rad/s]');
+ylabel('q [rad]');
 legend('q', 'qd');
 
 subplot(1,3,2);
@@ -14,7 +14,7 @@ grid on;
 plot(out.dq.Time, out.dq.data(:,1),'LineWidth', 1.2);
 hold on, plot(out.dq.Time, out.dqd.data(:,1),'LineWidth', 1.2);
 xlabel('time [s]');
-ylabel('dq [rad/s^2]');
+ylabel('dq [rad/s]');
 legend('dq', 'd\_qd');
 
 subplot(1,3,3);

@@ -31,7 +31,7 @@ param.K = diag([5 1 1 1 1 1]);
 Fd = [0.1 0 0 0 0 0];
 
 t1 = 0.1;
-d2 = 0;
+d2 = -0.1;
 d3 = 0.1;
 xd = Kinematics([t1 d2 d3], param);
 

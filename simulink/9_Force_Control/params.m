@@ -34,11 +34,11 @@ Fd = [0.07 0 0 0 0 0];
 % PD Controller parameters
 Kp = diag([800 800 500 1 10 1]);
 Kd = diag([200 100 50 1 1 1]);
-Md = diag([0.1 1 1 1 1 1]);
+Md = diag([0.1 0.1 1 1 1 1]);
 inv_Md = inv(Md);
 
 % Compliance
-Kf = diag([10 1 1.4 1 1 1]);
-Ki = diag([15 1 1.4 1 1 1]);
+Kf = diag([10 0 1.4 1 1 1]);
+Ki = diag([0 0 1.4 1 1 1]);
 
 
