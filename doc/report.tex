@@ -365,7 +365,15 @@ For the inertia tensors we can use the following formulas for the cylindrical an
 \]
 
 \bigskip
-\noindent Finally we need to compute the partial jacobians in order to calculate velocity of intermediate links.
+\noindent Finally we need to compute the partial jacobians in order to calculate the velocities of intermediate links (for $j > i$ the partial jacobians have zero columns):
+\begin{align*}
+    J^{\l_i}_P &= \begin{bmatrix}
+        J^{\l_i}_{P_1} & \cdots & J^{\l_i}_{P_j} & \cdots & J^{\l_i}_{P_i} & \emptyset & \cdots & \emptyset
+    \end{bmatrix} \\
+    J^{\l_i}_O &= \begin{bmatrix}
+        J^{\l_i}_{O_1} & \cdots & J^{\l_i}_{O_j} & \cdots & J^{\l_i}_{O_i} & \emptyset & \cdots & \emptyset
+    \end{bmatrix}
+\end{align*}
 
 \[
     J^{\l_i}_{P_j} = \begin{cases}

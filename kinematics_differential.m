@@ -18,12 +18,12 @@ Ja_sym = [JaLinearVel; JaOrientation];
 
 % Geometric Jacobians (from base to ee)
 % The manually computed geometric jacobian is reported
-% J = [-sin(t1)*(d3+l3+l1)   0   cos(t1);
+% J = [-sin(t1)*(d3+l3+l1)     0   cos(t1);
 %         0                   -1   0;
-%      cos(t1)*(l1+d3+l3)    0   sin(t1);
+%      cos(t1)*(l1+d3+l3)      0   sin(t1);
 %         0                    0   0;
-%         0                    0   0;
-%         1                    0   0;]
+%         -1                   0   0;
+%         0                    0   0;]
 tmp1 = (Hb_0*H0_1);
 tmp2 = (Hb_0*H0_1*H1_2);
 JP1 = cross(Hb_0(1:3,3), Pb_e-Hb_0(1:3,4));
@@ -52,15 +52,15 @@ J = [JP; J0];
 %                         0 0       0;
 %                         1 0       0]
 %
-tmp1 = (H0_1);
-tmp2 = (H0_1*H1_2);
-tmp3 = (H0_1*H1_2*H2_3);
-P0_e = tmp3(1:3,4);
+z0 = [0; 0; 1];
+H0_2 = (H0_1*H1_2);
+H0_3 = (H0_1*H1_2*H2_3);
+P0_e = H0_3(1:3,4); % H3_e is the identity
 
-JP1 = cross(H0_1(1:3,3), P0_e-P0);
-JP2 = tmp1(1:3,3); 
-JP3 = tmp2(1:3,3); 
-J01 = H0_1(1:3,3);
+JP1 = cross(z0, P0_e-P0);
+JP2 = H0_1(1:3,3); 
+JP3 = H0_2(1:3,3); 
+J01 = z0;
 J02 = [0; 0; 0;];
 J03 = [0; 0; 0;];
 
