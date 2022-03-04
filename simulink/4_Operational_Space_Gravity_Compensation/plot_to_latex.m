@@ -82,3 +82,15 @@ plot(out.x.Time, out.tau.data(:,3),'LineWidth', 1.2);
 xlabel('time [s]');
 ylabel('tau [Nm]');
 legend('tau3');
+
+%%
+% figure();
+% hold on;
+% grid on;
+% plot(out.x.Time, out.x.data(:,2),'LineWidth', 1.2);
+% plot(x_old.Time, x_old.data(:,2),'LineWidth', 1.2);
+% %hold on; plot(out.xd.Time, out.xd.data(1),'LineWidth', 1.2);
+% yline(out.xd.data(1,2),'-','');
+% xlabel('time [s]');
+% ylabel('y [m]');
+% legend('y fixed', 'y', 'yd');

@@ -21,10 +21,11 @@ l1 = param.l1;
 l2 = param.l2;
 l3 = param.l3;
 
-t1 = 0; %0.1;
+t1 = 0.1; %0.1;
 d2 = -0.1;
 d3 = 0; %0.05;
 
+qd = [t1,d2,d3];
 xd = Kinematics([t1,d2,d3], param);
 
 % PD Controller parameters
