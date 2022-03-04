@@ -18,7 +18,6 @@ q_time = [symfun('t1(t)', t), symfun('d2(t)', t), symfun('d3(t)', t)];
 dq_time = diff(q_time);
 ddq_time = diff(dq_time);
 
-
 Ja_time = subs(Ja_op, q, q_time);
 dot_Ja_time = diff(Ja_time, t);
 dot_Ja0_e = simplify(subs(dot_Ja_time, [dq_time,q_time], [d_q,q]));

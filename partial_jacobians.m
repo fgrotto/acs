@@ -13,17 +13,17 @@
 
 % Perform the calculations using the symbolic toolbox
 z0 = [0; 0; 1];
-JPL1_1 = cross(z0, pL(:,1)-z0);
+JPL1_1 = cross(z0, pL(:,1)-P0);
 JPL1_2 = [0;0;0];
 JPL1_3 = [0;0;0];
 JPL1 = [JPL1_1 JPL1_2 JPL1_3];
 
-JPL2_1 = cross(z0, pL(:,2)-z0);
+JPL2_1 = cross(z0, pL(:,2)-P0);
 JPL2_2 = H0_1(1:3,3);
 JPL2_3 = [0; 0; 0];
 JPL2 = [JPL2_1 JPL2_2 JPL2_3];
 
-JPL3_1 = cross(z0, pL(:,3)-z0);
+JPL3_1 = cross(z0, pL(:,3)-P0);
 JPL3_2 = H0_1(1:3,3);
 JPL3_3 = H0_2(1:3,3);
 JPL3 = [JPL3_1 JPL3_2 JPL3_3];

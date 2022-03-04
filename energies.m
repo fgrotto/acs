@@ -65,7 +65,7 @@ U = simplify(U);
 % Cylinder Link 1
 I1 = m1 * [1/2*(2*r1)^2          0                  0 ; 
             0    1/2*(3*(2*r1)^2 + l1^2)          0; 
-          0             0         1/2*(3*(2*r1)^2 + l1^2)];
+            0             0         1/2*(3*(2*r1)^2 + l1^2)];
 L1I = I1 + steiner(m1, pL1_1);
 
 % Prismatic Link 2
