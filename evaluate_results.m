@@ -64,7 +64,7 @@ theta_dd = 0;
 psi_dd = 0;
 
 ya = eval(Ba*dd_x+Ca_dx+ga);
-ya_expected = eval((inv(B)*Ja0_e_sym'*Ba)'*tau);
+ya_expected = eval(Ta'*pinv(J0_e_sym')*tau);
 eq = ya == ya_expected;
 
 % u_operational = Ta'*h;
