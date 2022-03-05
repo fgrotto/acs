@@ -17,7 +17,7 @@ r3_23 = R2_3'*H2_3(1:3,4);
 % Distances CoM and links
 r1_1c1 = [-l1/2; 0; 0];
 r2_2c2 = [0; l2/2; 0];
-r3_3c3 = [0; 0; -l3/2];
+r3_3c3 = [0; 0; -l3]; % renaming
 
 % First rotative joint
 w1_1 = (R0_1)'*w0_0+R0_1'*d_q(1)*z0;

@@ -62,7 +62,7 @@
 \includegraphics[scale=0.40,trim={10, 10, 10, 10},clip]{images/robot.png}
 \end{center}
 
-\noindent Lets define the DH table for our manipulator:
+\noindent Lets define the DH table for our manipulator (for simplicity we renamed $\l_3/2$ to $\l_3$):
 
 \begin{center}
 \begin{tabular}{|c|c|c|c|c|}
@@ -143,33 +143,32 @@ H^0_e(\q) = \begin{bmatrix}
 \]
 
 \subsection{Inverse Kinematics}
-Let's consider the position of ee with respect of the base frame to calculate the value of the joints.
+Let's consider the position of ee with respect of the frame zero to calculate the value of the joints.
 \[
-p^b_e = \begin{bmatrix}
+p^0_e = \begin{bmatrix}
     x \\ y \\ z \\
 \end{bmatrix}
 =
 \begin{bmatrix}
     c_1(\l_1+\l_3+d_3)\\
-     -\l_2 - d_2 \\
-    s_1(\l_1+\l_3+d_3) + \l_0 \\
-    1        \\
+    s_1(\l_1+\l_3+d_3)\\
+    \l_2 + d_2 \\
 \end{bmatrix}
 \]
 
 It is easy to see that
 \[
-d_2 = - \l_2 - y \\
+d_2 = z - \l_2 \\
 \]
 
 \[
-\t_1 = \mathop{Atan2}(z-\l_0, x)
+\t_1 = \mathop{Atan2}(y, x)
 \]
 
 
 For $d_3$ we can apply sum of squares and the result is:
 \[
-  d_3 = -\l_1 \pm \sqrt{x^2+(z-\l_0)^2} - \l_3  
+  d_3 = -\l_1 + \sqrt{x^2+y^2} - \l_3  
 \]
 
 \section{Differential Kinematics}
@@ -301,7 +300,7 @@ T_A(\phi_e) = \begin{bmatrix}
 \]
 
 \section{Lagrangian formulation}
-Let's calculate $p_{\l_i}$ of the center of mass wrt of $\Sigma_0$. To get them let's calculate $p^i_{\l_i}$ of the center of mass wrt of $\Sigma_i$
+Let's calculate $p_{\l_i}$ of the center of mass wrt of $\Sigma_0$. To get them let's calculate $p^i_{\l_i}$ of the center of mass wrt of $\Sigma_i$ (remember the renaming of $\l_3$).
 \[
 p_{\l_1}^{1} = \begin{bmatrix}  - \frac{\l_1}{2} \\ 0 \\ 0 \end{bmatrix}
 \qquad
@@ -309,7 +308,7 @@ p_{\l_1}^{1} = \begin{bmatrix}  - \frac{\l_1}{2} \\ 0 \\ 0 \end{bmatrix}
 p_{\l_2}^{2} = \begin{bmatrix} 0 \\ \frac{\l_2}{2} \\ 0 \end{bmatrix}
 \qquad
 \qquad
-p_{\l_3}^{3} = \begin{bmatrix} 0 \\ 0 \\  - \frac{\l_3}{2} \end{bmatrix}
+p_{\l_3}^{3} = \begin{bmatrix} 0 \\ 0 \\  - \l_3 \end{bmatrix}
 \]
 we can express the homogenous wrt of $\Sigma_0$ using the following formula: 
 \[
@@ -327,7 +326,7 @@ The potential energy is calculated according to the formula:
 \]
 \noindent The total potential energy is the sum of the 3 contributions $U_1$ $U_2$ and $U_3$. The total expression is reported and was calculated using the MATLAB symbolic toolbox w.r.t of frame 0 ($l_{i}$ is the length of i-th link and $m_i$ is the mass)
 \[
-    U = \frac{gsin(\theta_1)(l_{1}m_1 + 2l_{1}m_2 + 2l_{1}m_3 + l_{3}m_3 + 2d_3m_3)}{2}  
+    U = \frac{gsin(\theta_1)(l_{1}m_1 + 2l_{1}m_2 + 2l_{1}m_3 + 2d_3m_3)}{2}  
 \]
 
 \subsection{Kinetic Energy}
@@ -404,8 +403,8 @@ For the inertia tensors we can use the following formulas for the cylindrical an
 \]
 \[
     J^{\l_3}_{P} = \begin{bmatrix}
-        -sin(\theta_1)(\l_1 + \l_3/2 + d_3) &0 & cos(\theta_1)\\
- cos(\theta_1)(\l_1 + \l_3/2 + d_3) &0 &sin(\theta_1)\\
+        -sin(\theta_1)(\l_1 + d_3) &0 & cos(\theta_1)\\
+ cos(\theta_1)(\l_1 + d_3) &0 &sin(\theta_1)\\
                           0 &1 &      0
     \end{bmatrix}
     \qquad
