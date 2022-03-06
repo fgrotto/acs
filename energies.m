@@ -62,6 +62,7 @@ U = simplify(U);
 %     0 b3^2+4*l3^2 0;
 %     0 0 b3^2+b3^2];
 
+% Get inertial tensor wrt of the local frame
 % Cylinder Link 1
 I1 = m1 * [1/2*(2*r1)^2          0                  0 ; 
             0    1/2*(3*(2*r1)^2 + l1^2)          0; 
@@ -80,7 +81,7 @@ I3 = m3 * [1/12*(b3^2 + (2*l3)^2)        0                0 ;
                 0                0         1/12*(b3^2 + b3^2)];
 L3I = I3 + steiner(m3, pL3_3);
 
-            
+% Move inertia tensors wrt of frame 0          
 IL1_1 = simplify(H0_1(1:3,1:3) * L1I * H0_1(1:3,1:3)');
 IL2_2 = simplify(H0_2(1:3,1:3) * L2I * H0_2(1:3,1:3)');
 IL3_3 = simplify(H0_3(1:3,1:3) * L3I * H0_3(1:3,1:3)');

@@ -28,7 +28,7 @@ Md = diag([1 0.1 1 1 1 1]);
 inv_Md = inv(Md);
 
 % Environment like a box (3 walls in front of the robot)
-K = 1*diag([200 1 1 1 1 1]);
+K = 1*diag([5 1 1 1 1 1]);
 param.Kp = Kp;
 param.K = K;
 

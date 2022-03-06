@@ -55,6 +55,12 @@ eval(tau_rne)
 he = [f_e1; f_e2; f_e3; mu_e1; mu_e2; mu_e3];
 ue = Ta'*he;
 
+% Evaluate dot_B - 2*C
+B_time = subs(B,q,q_time);
+dot_B = diff(B_time, t);
+dot_B = simplify(subs(dot_B, [dq_time,q_time], [d_q,q]));
+eval(dot_B -2*C); % skew symmetric
+ 
 % Add operational space variables
 x_dd = 0; 
 y_dd = 0; 
