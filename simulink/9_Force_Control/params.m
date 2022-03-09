@@ -39,6 +39,6 @@ inv_Md = inv(Md);
 
 % Compliance
 Kf = diag([10 0 1.4 1 1 1]);
-Ki = diag([0 0 1.4 1 1 1]);
+Ki = diag([5 0 1.4 1 1 1]);
 
 

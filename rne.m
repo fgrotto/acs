@@ -48,15 +48,15 @@ he = [f_e; mu_e];
 
 % Third prismatic joint
 f_3 = R3_e*f_e+m3*dd_p3_c3;
-mu_3 = -cross(f_3, (r3_23+r3_3c3))+R3_e*mu_e+cross(R3_e*f_e,r3_3c3)+L3I*d_w3_3+cross(w3_3,L3I*w3_3);
+mu_3 = -cross(f_3, (r3_23+r3_3c3))+R3_e*mu_e+cross(R3_e*f_e,r3_3c3)+IL3_3*d_w3_3+cross(w3_3,IL3_3*w3_3);
 tau3 = f_3'*R2_3'*z0+Fvi(3)*d_q(3)+Fsi(3)*sign(d_q(3));
 
 % Second prismatic joint
 f_2 = R2_3*f_3+m2*dd_p2_c2;
-mu_2 = -cross(f_2, (r2_12+r2_2c2))+R2_3*mu_3+cross(R2_3*f_3,r2_2c2)+L2I*d_w2_2+cross(w2_2,L2I*w2_2);
+mu_2 = -cross(f_2, (r2_12+r2_2c2))+R2_3*mu_3+cross(R2_3*f_3,r2_2c2)+IL2_2*d_w2_2+cross(w2_2,IL2_2*w2_2);
 tau2 = f_2'*R1_2'*z0+Fvi(2)*d_q(2)+Fsi(2)*sign(d_q(2));
 
 % First rotative joint
 f_1 = R1_2*f_2+m1*dd_p1_c1;
-mu_1 = -cross(f_1, (r1_01+r1_1c1))+R1_2*mu_2+cross(R1_2*f_2,r1_1c1)+L1I*d_w1_1+cross(w1_1,L1I*w1_1);
+mu_1 = -cross(f_1, (r1_01+r1_1c1))+R1_2*mu_2+cross(R1_2*f_2,r1_1c1)+IL1_1*d_w1_1+cross(w1_1,IL1_1*w1_1);
 tau1 = mu_1'*R0_1'*z0+Fvi(1)*d_q(1)+Fsi(1)*sign(d_q(1));

@@ -338,7 +338,7 @@ The kinetic energy is calculated using the following formula:
 \[
 B(\q) = \sum_{i=1}^{n} B_i(\q)
       = \sum_{i=1}^{n} m_{\l_i} \bigl({J^{\l_i}_{P}}\T J^{\l_i}_{P}\bigr)
-       +  \bigl({R_i^0}\T J^{\l_i}_{O}\bigr)\T I_{\l_i}^{i} \bigl({R_i^0}\T J^{\l_i}_{O}\bigr)
+       +  \bigl(J^{\l_i}_{O}\bigr)\T{R_i^0} I_{\l_i}^{i} \bigl({R_i^0}\T J^{\l_i}_{O}\bigr)
 \]
 
 \noindent It is necessary to calculate the inertia tensors $I_{\l_i}^{i}$ and the partial jacobians $J^{\l_i}_{P}$ and $J^{\l_i}_{O}$. We will use the steiner theorem because all frames $\Sigma_i$ are translated of $p_{\l_i}^{i}$ w.r.t. of the center of mass (i.e inertia tensor w.r.t. of the axis of the joint that the
