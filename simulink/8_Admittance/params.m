@@ -22,18 +22,18 @@ l1 = param.l1;
 l2 = param.l2;
 l3 = param.l3;
 
-Kp = diag([500 400 100 1 1 1]);
+Kp = diag([1000 400 100 1 1 1]);
 Kd = diag([30 20 14 1 1 1]);
-Md = diag([1 1 1 1 1 1]);
+Md = diag([0.1 1 1 1 1 1]);
 inv_Md = inv(Md);
 
 % Environment like a box (3 walls in front of the robot)
-K = 5*diag([1 1 1 1 1 1]);
+K = 1*diag([5 1 1 1 1 1]);
 param.Kp = Kp;
 param.K = K;
 
 % Environment only one component for a simplified force control
-param.wall = 0.6;
+param.wall = 0.7;
 param.axis = 1; % 1-x 2-y 3-z wrt of frame 0
 
 % Admittance Controller
